@@ -1,16 +1,13 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
 import NavBar from './components/NavBar.vue';
 import Button from './components/Button.vue';
+import Grid from './components/Grid.vue';
 </script>
 
 <template>
   <NavBar />
-  <div>
-    <h1>TEST</h1>
-  </div>
-    <Button/>
-
+   <!-- <Button/>-->
+  <Grid />
   <!-- <HelloWorld msg="Vite + Vue" /> -->
 </template>
 

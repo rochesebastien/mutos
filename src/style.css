@@ -1,8 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+
 *{
   padding: 0;
   margin: 0;
 }
 
+
+
 body{
   background: #F2DCC3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
