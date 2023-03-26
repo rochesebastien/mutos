@@ -1,18 +1,15 @@
-<script >
-export default {
-  props: {
-    title: String,
-    message: String
-  },
-  created() {
-    console.log('Props passées :', this.title, this.message);
-  }
-}
+<script setup>
+
+defineProps({
+    letter: String,
+    type: String,
+  });
+  
 </script>
 
 <template>
     <div class="cell_val">
-        {{ letter ? letter : '.' }}
+        {{ letter ? letter : '' }}
     </div>
 </template>
 

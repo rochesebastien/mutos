@@ -23,9 +23,9 @@ export default {
     
     window.addEventListener("keypress", (event) => {
 
-        let CellInstance = createApp(Cell);
-        let instance = CellInstance.mount(cells[this.count],{letter:event.key,index:this.count})
-        this.count++;
+        // let CellInstance = createApp(Cell);
+        // let instance = CellInstance.mount(cells[this.count],{letter:event.key,index:this.count})
+        // this.count++;
 
         if (event.key == 'Backspace') {
             if (this.user_word.length != 1) {
@@ -55,10 +55,7 @@ export default {
     <div class="grid" >
         <div class="row" v-for="i in numligne">
             <div  v-for="(letter, index) in length" :key="index">
-                <div class="cell">
-
-                </div>
-                <!---<Cell class="test"/>-->
+                <Cell class="cell" :letter="this.user_word[index]" />
             </div>
             <!--:letter="letter[index]" :index="index" -->
         </div>
