@@ -28,18 +28,17 @@ export default {
           this.user_word[this.numligne].push(event.key); 
         }  
       }
-
+      // Si la touche suppr est press
       if (event.key == 'Backspace') {
+        // Enlève la derniere lettre
         this.RemoveLast();
+      // Si la touche entrée est press
       } else if(event.key == 'Enter') {
           //Si la ligne est full
-          // console.log("zdadz : "+await this.checkIfExist());
         if(this.checkRowIsFilled()){
-          console.log(await this.checkIfExist());
-          if(await this.checkIfExist()){
-
+           //Si le mot existe
+          if(await Repository.existInWords(this.user_word[this.numligne].join(''))){
               this.IncrementRow();
-              
               //Check les lettre
           } else {
             this.ShowError("Le mot n'existe pas");
@@ -49,40 +48,8 @@ export default {
           this.ShowError("Remplissez d'abord la ligne");
         }
           
-        //   if (await this.checkIfExist()) {//Si le mot existe
-        //       this.IncrementRow()
-        //       this.AddFirstLetter()  
-        //   if (this.CheckNoTry()) {
-        //     this.ShowError("Plus d'essaies : vous avez perdu");
-        //   }
-        //   } else if(!this.checkRowIsFilled()){
-        //     //
-        //     // this.CleanRow();
-        //     this.ShowError("Remplissez d'abord la ligne");
-        //   }else{ 
-        //     this.ShowError("Le mot existe pas");
-        //   }
-        // } else {
-           
           
         }
-    },
-    //Regarde si le mot existe
-    async checkIfExist(){
-      console.log("entré");
-      console.log(await Repository.getWords());
-      // await Repository.getWords().then((wordArray) => {
-      // const userWord = this.user_word[this.numligne].join('');
-      // console.log("mot : "+userWord);
-      // console.log(wordArray);
-
-      // console.log(wordArray.includes(userWord))
-      if(wordArray.includes(userWord)){
-        console.log('aaa');
-        return true;
-      } else {
-        return false;
-      }
     },
     //Ajoute la premiere lettre du mot en début de ligne
     AddFirstLetter(){
@@ -139,14 +106,13 @@ export default {
     for(let i = 0; i < this.try; i++) {
       this.user_word.push([])
     }
-    
     this.AddFirstLetter()
 
     // const cells = document.querySelectorAll('.cell')
     
     window.addEventListener("keypress", async (event) => {
       this.KeyboardListener(event)
-     
+    
       });
   },
 };
