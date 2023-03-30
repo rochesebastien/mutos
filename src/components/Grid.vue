@@ -18,13 +18,14 @@ export default {
       length:0,
       numligne : 0,
       try:6,
+      letter_find:[],
       Error:{error:0,error_msg:"Erreur"},
     };
   },
   methods:{
     async KeyboardListener(event){
       if(/^[a-z]$/.test(event.key)){
-        if(!this.checkRowIsFilled()){
+        if(!this.CheckRowIsFilled()){
           this.user_word[this.numligne].push(event.key); 
         }  
       }
@@ -35,11 +36,19 @@ export default {
       // Si la touche entrée est press
       } else if(event.key == 'Enter') {
           //Si la ligne est full
-        if(this.checkRowIsFilled()){
+          if (this.CheckNoTry()) {
+            if(this.CheckRowIsFilled()){
            //Si le mot existe
-          if(await Repository.existInWords(this.user_word[this.numligne].join(''))){
+          if(await Repository.ExistInWords(this.user_word[this.numligne].join(''))){
+            if(this.IfIsWord()){
+                this.ShowError("Bien joué c'est gagné");
+              }
+               //Check les lettres
+              this.CheckLetter();
               this.IncrementRow();
-              //Check les lettre
+              this.AddFirstLetter();
+             
+              
           } else {
             this.ShowError("Le mot n'existe pas");
             this.CleanRow();
@@ -47,9 +56,37 @@ export default {
         } else {
           this.ShowError("Remplissez d'abord la ligne");
         }
-          
+          } else {
+            this.ShowError("C'est perdu");
+          }
+       
           
         }
+    },
+    CheckLetter(){
+      let lettersFound = [];
+      let correctPosition = [];
+
+      for (let i = 0; i < this.user_word[this.numligne].length; i++) {
+        let letter = this.user_word[this.numligne][i];
+
+        if (this.word.includes(letter)) {
+          lettersFound.push(letter);
+          if (this.word.indexOf(letter) === i) {
+            correctPosition.push(letter);
+          }
+        }
+      }
+      console.log("Lettre(s) qui sont dans le mots : "+lettersFound,"Lettre(s) qui sont à la bonne position : "+correctPosition);
+  // return {
+  //   lettersFound,
+  //   correctPosition
+  // };
+      // for (let i = 0; i < this.user_word[this.numligne].length; i++) {
+      //   const letr = this.user_word[this.numligne][i];
+      //   this.letter_find.push(letr)
+      // }
+      // console.log(this.letter_find);
     },
     //Ajoute la premiere lettre du mot en début de ligne
     AddFirstLetter(){
@@ -59,9 +96,7 @@ export default {
     IncrementRow(){
       this.numligne++;
     },
-    checkRowIsFilled(){
-      // console.log("Longueur du tap : "+this.user_word[this.numligne].length);
-      // console.log("Longueur du mot : "+this.length);
+    CheckRowIsFilled(){
       if(this.user_word[this.numligne].length != this.length){
         return false;
       } else {
@@ -86,10 +121,10 @@ export default {
     },
      //Si le nombre d'essaie est de 0 = perdu
     CheckNoTry(){
-        if(this.numligne === this.try){
-          return true;
-        } else{
+        if(this.numligne+1 === this.try){
           return false;
+        } else{
+          return true;
         }
     },
     //Enleve la dernière lettre écrite
@@ -97,6 +132,14 @@ export default {
       if (this.user_word[this.numligne].length != 1) {
                 this.user_word[this.numligne].pop();
         }
+    },
+    IfIsWord(){
+      console.log(this.user_word[this.numligne].join(''));
+      if(this.user_word[this.numligne].join('') == this.word){
+       return true;
+      } else {
+        return false;
+      }
     }
     },
 

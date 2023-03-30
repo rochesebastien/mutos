@@ -29,7 +29,7 @@ export default {
     },
   
      // ? Récupère un Array de la liste de mots français existants
-     async existInWords(userWord) {
+     async ExistInWords(userWord) {
       try {
       const response = await fetch("/src/data/gutenberg.txt");
       const text = await response.text();
