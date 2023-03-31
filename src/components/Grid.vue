@@ -28,20 +28,28 @@ export default {
   },
   methods:{
     CheckLetter(){
-      let lettersFound = [];
-      let correctPosition = [];
 
       for (let i = 0; i < this.Game.letters_user[this.numligne].length; i++) {
         let letter = this.Game.letters_user[this.numligne][i];
 
-        if (this.word.includes(letter)) {
-          lettersFound.push(letter);
+        if (this.word.includes(letter)) {       
           if (this.word.indexOf(letter) === i) {
-            correctPosition.push(letter);
+            this.Game.LetterFind.letters.push(letter);
+            this.Game.LetterFind.positions.push(this.word.indexOf(letter));
+            console.log("Bonne pos : "+letter);
+          } else {
+            this.Game.LetterGuessed.letters.push(letter);
+            this.Game.LetterGuessed.positions.push(this.word.indexOf(letter));
           }
         }
       }
-      console.log("Lettre(s) qui sont dans le mots : "+lettersFound,"Lettre(s) qui sont à la bonne position : "+correctPosition);
+      console.log("-------");
+      console.log("Lettres trouvées à la bonne pos : "+this.Game.LetterFind.letters);
+      console.log("Positions : "+this.Game.LetterFind.positions);
+      console.log("--");
+      console.log("Lettres trouvées pas à la bonne pos   : "+this.Game.LetterGuessed.letters);
+      console.log("Positions : "+this.Game.LetterGuessed.positions);
+      console.log("-------");
   // return {
   //   lettersFound,
   //   correctPosition
@@ -53,7 +61,6 @@ export default {
       // console.log(this.letter_find);
     },
     async KeyboardListener(event){
-      console.log(event);
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
           this.Game.letters_user[this.numligne].push(event.key); 
