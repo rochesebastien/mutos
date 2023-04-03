@@ -16,7 +16,7 @@ export default {
       Game:{
         letters_user:[],
         LetterGuessed:{letters:[],positions:[]},
-        LetterFind:{letters:[],positions:[]},
+        LetterFound:{letters:[],positions:[]},
         letters_guessed:[],
         try:5,
       },
@@ -27,39 +27,37 @@ export default {
     };
   },
   methods:{
-    CheckLetter(){
+    CheckOneLetter(lettre,position){
 
-      for (let i = 0; i < this.Game.letters_user[this.numligne].length; i++) {
-        let letter = this.Game.letters_user[this.numligne][i];
-
-        if (this.word.includes(letter)) {       
-          if (this.word.indexOf(letter) === i) {
-            this.Game.LetterFind.letters.push(letter);
-            this.Game.LetterFind.positions.push(this.word.indexOf(letter));
-            console.log("Bonne pos : "+letter);
-          } else {
-            this.Game.LetterGuessed.letters.push(letter);
-            this.Game.LetterGuessed.positions.push(this.word.indexOf(letter));
-          }
-        }
+      const pos = this.word.split('').indexOf(lettre);
+      console.log(lettre +" : "+ pos);
+      if(position = pos){
+        return true;
+      } else {
+        return false;
       }
-      console.log("-------");
-      console.log("Lettres trouvées à la bonne pos : "+this.Game.LetterFind.letters);
-      console.log("Positions : "+this.Game.LetterFind.positions);
-      console.log("--");
-      console.log("Lettres trouvées pas à la bonne pos   : "+this.Game.LetterGuessed.letters);
-      console.log("Positions : "+this.Game.LetterGuessed.positions);
-      console.log("-------");
-  // return {
-  //   lettersFound,
-  //   correctPosition
-  // };
+      // if()
       // for (let i = 0; i < this.Game.letters_user[this.numligne].length; i++) {
-      //   const letr = this.Game.letters_user[this.numligne][i];
-      //   this.letter_find.push(letr)
-      // }
-      // console.log(this.letter_find);
-    },
+      //   let letter = this.Game.letters_user[this.numligne][i];
+      //   console.log(this.word.split('')[i]);
+      //   console.log(letter);
+      //   if(letter == this.word.split('')[i]){
+      //     console.log("👍");
+      //   }
+      //   console.log("---");
+            // if (this.word.includes(letter)) {
+            //   console.log(this.word.indexOf(letter));       
+              // if (this.word.indexOf(letter) === i) {
+              //   this.Game.LetterFind.letters.push(letter);
+              //   this.Game.LetterFind.positions.push(this.word.indexOf(letter));
+              //   console.log("Bonne pos : "+letter+" : "+i);
+              // } else {
+              //   this.Game.LetterGuessed.letters.push(letter);
+              //   this.Game.LetterGuessed.positions.push(this.word.indexOf(letter));
+              // }
+        
+      }
+    ,
     async KeyboardListener(event){
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
@@ -79,11 +77,22 @@ export default {
           if(await Repository.ExistInWords(this.Game.letters_user[this.numligne].join(''))){
             if(this.IfIsWord()){
                 this.ShowError("Bien joué c'est gagné");
-              }
-               //Check les lettres
-              this.CheckLetter();
+                //Check les lettres
+              
+              for (let index = 0; index < this.Game.letters_user[this.numligne].length; index++) { 
+                  if(this.CheckOneLetter(this.Game.letters_user[this.numligne][index],index)){
+                    this.Game.LetterFound.letters.push(this.Game.letters_user[this.numligne][index]);
+                    this.Game.LetterFound.positions.push(index);
+                  }
+                }
               this.IncrementRow();
               this.AddFirstLetter();
+              console.log(this.Game.LetterFound.letters);
+              console.log(this.Game.LetterFound.positions);
+             
+
+              
+              
              
               
           } else {
@@ -96,9 +105,7 @@ export default {
           } else {
             this.ShowError("C'est perdu");
           }
-       
-          
-        }
+        }}          
     },
     //Ajoute la premiere lettre du mot en début de ligne
     AddFirstLetter(){
@@ -175,6 +182,7 @@ export default {
 
 <template>
   <Dialog :class="[this.Error.error != 0 ? 'dialog_see' : '']" :error_msg="this.Error.error_msg"/>
+  {{ this.Game.LetterFound.letters }}
   {{  this.Game.letters_user }}
     <div class="grid" >
         <div class="row" v-for="row in this.Game.try">
