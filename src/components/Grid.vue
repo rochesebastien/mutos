@@ -30,8 +30,10 @@ export default {
     CheckOneLetter(lettre,position){
 
       const pos = this.word.split('').indexOf(lettre);
-      console.log(lettre +" : "+ pos);
-      if(position = pos){
+      // console.log(pos);
+      // console.log(position);
+      // console.log(lettre +" : "+ pos);
+      if(position == pos){
         return true;
       } else {
         return false;
@@ -78,7 +80,10 @@ export default {
             if(this.IfIsWord()){
                 this.ShowError("Bien joué c'est gagné");
                 //Check les lettres
-              
+            }
+            const check_len = this.Game.letters_user[this.numligne].length
+            console.log(check_len);
+            // console.log(this.CheckOneLetter(this.Game.letters_user[this.numligne][0],0));
               for (let index = 0; index < this.Game.letters_user[this.numligne].length; index++) { 
                   if(this.CheckOneLetter(this.Game.letters_user[this.numligne][index],index)){
                     this.Game.LetterFound.letters.push(this.Game.letters_user[this.numligne][index]);
@@ -87,13 +92,9 @@ export default {
                 }
               this.IncrementRow();
               this.AddFirstLetter();
-              console.log(this.Game.LetterFound.letters);
-              console.log(this.Game.LetterFound.positions);
-             
+              // console.log(this.Game.LetterFound.letters);
+              // console.log(this.Game.LetterFound.positions);
 
-              
-              
-             
               
           } else {
             this.ShowError("Le mot n'existe pas");
@@ -105,7 +106,7 @@ export default {
           } else {
             this.ShowError("C'est perdu");
           }
-        }}          
+      }          
     },
     //Ajoute la premiere lettre du mot en début de ligne
     AddFirstLetter(){
@@ -135,7 +136,6 @@ export default {
     CleanRow(){
       this.Game.letters_user[this.numligne].length = 0
       this.AddFirstLetter();
-      console.log("Nettoyage de l'array "+this.numligne);
       console.log(this.Game.letters_user[this.numligne]);
     },
      //Si le nombre d'essaie est de 0 = perdu
@@ -187,7 +187,7 @@ export default {
     <div class="grid" >
         <div class="row" v-for="row in this.Game.try">
             <div  v-for="(letter, index) in length" :key="index">     
-              <Cell class="cell" :letter="this.Game.letters_user[row-1][index]" />
+              <Cell :class="[this.Game.LetterFound.letters[index] == this.Game.letters_user[row-1][index] && this.Game.letters_user[row-1][index] != '' ? 'cell found' : 'cell']" :letter="this.Game.letters_user[row-1][index]" />
             </div>
             <!--:letter="letter[index]" :index="index" -->
         </div>
@@ -230,7 +230,7 @@ export default {
   border-radius: 107px;
 }
 
-.find:before{
+.found:before{
   content: "";
   position: absolute;
   z-index: -1;
