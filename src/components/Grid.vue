@@ -28,39 +28,17 @@ export default {
   },
   methods:{
     CheckOneLetter(lettre,position){
-
-      const pos = this.word.split('').indexOf(lettre);
-      // console.log(pos);
       // console.log(position);
       // console.log(lettre +" : "+ pos);
-      if(position == pos){
+      if(lettre == this.word.split('')[position]){
         return true;
       } else {
         return false;
-      }
-      // if()
-      // for (let i = 0; i < this.Game.letters_user[this.numligne].length; i++) {
-      //   let letter = this.Game.letters_user[this.numligne][i];
-      //   console.log(this.word.split('')[i]);
-      //   console.log(letter);
-      //   if(letter == this.word.split('')[i]){
-      //     console.log("👍");
-      //   }
-      //   console.log("---");
-            // if (this.word.includes(letter)) {
-            //   console.log(this.word.indexOf(letter));       
-              // if (this.word.indexOf(letter) === i) {
-              //   this.Game.LetterFind.letters.push(letter);
-              //   this.Game.LetterFind.positions.push(this.word.indexOf(letter));
-              //   console.log("Bonne pos : "+letter+" : "+i);
-              // } else {
-              //   this.Game.LetterGuessed.letters.push(letter);
-              //   this.Game.LetterGuessed.positions.push(this.word.indexOf(letter));
-              // }
-        
+      }      
       }
     ,
     async KeyboardListener(event){
+      console.log(event);
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
           this.Game.letters_user[this.numligne].push(event.key); 
@@ -76,13 +54,13 @@ export default {
           if (this.CheckNoTry()) {
             if(this.CheckRowIsFilled()){
            //Si le mot existe
-          if(await Repository.ExistInWords(this.Game.letters_user[this.numligne].join(''))){
+          // if(await Repository.ExistInWords(this.Game.letters_user[this.numligne].join(''))){
+             if(true){
             if(this.IfIsWord()){
                 this.ShowError("Bien joué c'est gagné");
                 //Check les lettres
             }
             const check_len = this.Game.letters_user[this.numligne].length
-            console.log(check_len);
             // console.log(this.CheckOneLetter(this.Game.letters_user[this.numligne][0],0));
               for (let index = 0; index < this.Game.letters_user[this.numligne].length; index++) { 
                   if(this.CheckOneLetter(this.Game.letters_user[this.numligne][index],index)){
@@ -153,7 +131,6 @@ export default {
         }
     },
     IfIsWord(){
-      console.log(this.Game.letters_user[this.numligne].join(''));
       if(this.Game.letters_user[this.numligne].join('') == this.word){
        return true;
       } else {
@@ -186,16 +163,35 @@ export default {
   {{  this.Game.letters_user }}
     <div class="grid" >
         <div class="row" v-for="row in this.Game.try">
-            <div  v-for="(letter, index) in length" :key="index">     
-              <Cell :class="[this.Game.LetterFound.letters[index] == this.Game.letters_user[row-1][index] && this.Game.letters_user[row-1][index] != '' ? 'cell found' : 'cell']" :letter="this.Game.letters_user[row-1][index]" />
+            <div  v-for="(letter, index) in length" :key="index"> 
+              <Cell :class="[ this.Game.LetterFound.letters[index] == this.Game.letters_user[row-1][index] && this.Game.LetterFound.letters[index] ? 'cell found' : 'cell ']" :letter="this.Game.letters_user[row-1][index]" />
             </div>
             <!--:letter="letter[index]" :index="index" -->
         </div>
+    </div>
+    <div class="test" v-for="row in this.Game.try">
+      Mot de l'utilisateur :
+      <div class="" v-for="(letter, index) in length" :key="index">
+         {{ this.Game.letters_user[row-1][index] }}
+      </div>
+    </div>
+
+    <div class="test" v-for="row in this.Game.try">
+      Mot de l'utilisateur :
+      <div class="" v-for="(letter, index) in length" :key="index">
+         {{ this.Game.letters_user[row-1][index] }}
+      </div>
     </div>
 </template>
 
 
 <style scoped>
+
+.test{
+  display: flex;
+  background-color: brown;
+}
+
 .grid{
     margin: 0 auto;
     display: grid;
