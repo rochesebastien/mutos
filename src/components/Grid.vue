@@ -14,34 +14,62 @@ export default {
   data() {
     return {
       Game:{
-        letters_user:[],
+        word: "tg",
+        try:2,
+      },
+      Cursor:{
+        row:0,
+        cell:0,
+      },
+      User:{
+        Letters:[],
         LetterGuessed:{letters:[],positions:[]},
         LetterFound:{letters:[],positions:[]},
-        letters_guessed:[],
-        try:5,
       },
-      word: "test",
-      length:0,
-      numligne : 0,
+      
       Error:{error:0,error_msg:"Erreur"},
     };
   },
   methods:{
     CheckOneLetter(lettre,position){
       // console.log(position);
-      // console.log(lettre +" : "+ pos);
+     
       if(lettre == this.word.split('')[position]){
+        console.log(lettre +" : "+ position);
         return true;
       } else {
         return false;
       }      
       }
     ,
+    Initialisation(){
+
+      // Boucler 5 fois pour créer 5 sous-arrays
+      for (let i = 0; i < this.Game.try; i++) {
+        // Créer un array vide pour chaque sous-array
+        let arrayEnfant = [];
+        // Boucler 2 fois pour ajouter 2 éléments à chaque sous-array
+        for (let j = 0; j < this.Game.word.length; j++) {
+          // Ajouter un élément à chaque sous-array
+          arrayEnfant.push(' ');
+        }
+        // Ajouter le sous-array rempli au tableau parent
+        this.User.Letters.push(arrayEnfant);
+      }
+      // Afficher le tableau parent et ses sous-arrays
+
+      
+    this.AddFirstLetter()
+    console.log(this.User.Letters[0][1]);
+    },
     async KeyboardListener(event){
-      console.log(event);
+      // console.log(this.User.Letters[this.Cursor.row]);
+      console.log(event.key);
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
-          this.Game.letters_user[this.numligne].push(event.key); 
+          // this.User.Letters[this.Cursor.row].push(); 
+          this.User.Letters[this.Cursor.cell] = event.key;
+          this.Cursor.cell++;
         }  
       }
       // Si la touche suppr est press
@@ -60,19 +88,16 @@ export default {
                 this.ShowError("Bien joué c'est gagné");
                 //Check les lettres
             }
-            const check_len = this.Game.letters_user[this.numligne].length
+            const check_len = this.User.Letters[this.Cursor.row].length
             // console.log(this.CheckOneLetter(this.Game.letters_user[this.numligne][0],0));
-              for (let index = 0; index < this.Game.letters_user[this.numligne].length; index++) { 
-                  if(this.CheckOneLetter(this.Game.letters_user[this.numligne][index],index)){
-                    this.Game.LetterFound.letters.push(this.Game.letters_user[this.numligne][index]);
-                    this.Game.LetterFound.positions.push(index);
-                  }
-                }
+              // for (let index = 0; index < this.Game.letters_user[this.numligne].length; index++) { 
+              //     if(this.CheckOneLetter(this.Game.letters_user[this.numligne][index],index)){
+              //       this.Game.LetterFound.letters.push(this.Game.letters_user[this.numligne][index]);
+              //       this.Game.LetterFound.positions.push(index);
+              //     }
+              //   }
               this.IncrementRow();
               this.AddFirstLetter();
-              // console.log(this.Game.LetterFound.letters);
-              // console.log(this.Game.LetterFound.positions);
-
               
           } else {
             this.ShowError("Le mot n'existe pas");
@@ -88,14 +113,14 @@ export default {
     },
     //Ajoute la premiere lettre du mot en début de ligne
     AddFirstLetter(){
-      this.Game.letters_user[this.numligne].push(this.word.split('')[0]);
+      this.User.Letters[this.Cursor.row][0] = this.Game.word.split('')[0];
     },
     //Passe à la ligne suivante 
     IncrementRow(){
-      this.numligne++;
+      this.Cursor.row++;
     },
     CheckRowIsFilled(){
-      if(this.Game.letters_user[this.numligne].length != this.length){
+      if(this.User.Letters[this.Cursor.row].length != this.Game.word.length){
         return false;
       } else {
         return true;
@@ -131,7 +156,7 @@ export default {
         }
     },
     IfIsWord(){
-      if(this.Game.letters_user[this.numligne].join('') == this.word){
+      if(this.User.Letters[this.Cursor.row].join('') == this.Game.word){
        return true;
       } else {
         return false;
@@ -140,18 +165,10 @@ export default {
     },
 
    mounted() {
-    const word_splited = this.word.split('');
-    this.length = this.word.split('').length
-    for(let i = 0; i < this.Game.try; i++) {
-      this.Game.letters_user.push([])
-    }
-    this.AddFirstLetter()
-
     // const cells = document.querySelectorAll('.cell')
-    
+    this.Initialisation();
     window.addEventListener("keypress", async (event) => {
-      this.KeyboardListener(event)
-    
+      this.KeyboardListener(event);
       });
   },
 };
@@ -159,29 +176,33 @@ export default {
 
 <template>
   <Dialog :class="[this.Error.error != 0 ? 'dialog_see' : '']" :error_msg="this.Error.error_msg"/>
-  {{ this.Game.LetterFound.letters }}
-  {{  this.Game.letters_user }}
+   <!-- {{ [this.Cursor.cell] }} 
+  {{ [this.Cursor.row] }}  -->
+  
+  <!-- {{ [this.User.Letters][0][0] }}  -->
+  <!-- {{ [this.User.Letters[this.Cursor.row]][0][this.Cursor.cell] }} -->
+  <!-- {{  this.User.Letters[this.Cursor.row][this.Cursor.cell] }} -->
     <div class="grid" >
-        <div class="row" v-for="row in this.Game.try">
-            <div  v-for="(letter, index) in length" :key="index"> 
-              <Cell :class="[ this.Game.LetterFound.letters[index] == this.Game.letters_user[row-1][index] && this.Game.LetterFound.letters[index] ? 'cell found' : 'cell ']" :letter="this.Game.letters_user[row-1][index]" />
+        <!-- <div class="row" v-for="row in this.Game.try"> 
+            <div  v-for="(letter, index) in this.Game.word.length" :key="index"> 
+              <Cell class="cell" :letter='this.User.Letters[this.Cursor.row][index] ? this.User.Letters[this.Cursor.row][0][index] : "" ' />
             </div>
-            <!--:letter="letter[index]" :index="index" -->
-        </div>
+        </div> -->
     </div>
-    <div class="test" v-for="row in this.Game.try">
-      Mot de l'utilisateur :
-      <div class="" v-for="(letter, index) in length" :key="index">
-         {{ this.Game.letters_user[row-1][index] }}
+    <!-- {{ this.User.Letters[0] }}  -->
+    <div class="test" v-for="row in this.User.">
+      Ligne {{ row-1 }} :
+      <div class="" v-for="(letter, index) in this.Game.word.length" :key="index">
+         Lettre{{ index }} : {{ this.User.Letters[1] }}
       </div>
-    </div>
+    </div> 
 
-    <div class="test" v-for="row in this.Game.try">
+    <!-- <div class="test" v-for="row in this.Game.try">
       Mot de l'utilisateur :
       <div class="" v-for="(letter, index) in length" :key="index">
          {{ this.Game.letters_user[row-1][index] }}
       </div>
-    </div>
+    </div>-->
 </template>
 
 
