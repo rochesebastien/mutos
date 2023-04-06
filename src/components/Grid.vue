@@ -15,16 +15,18 @@ export default {
     return {
       Game:{
         word: "tg",
-        try:2,
+        try:5,
       },
       Cursor:{
         row:0,
         cell:0,
       },
+      Grid:{
+        rows:[],
+      },
       User:{
-        Letters:[],
-        LetterGuessed:{letters:[],positions:[]},
-        LetterFound:{letters:[],positions:[]},
+        letterGuessed:{letters:[],positions:[]},
+        letterFound:{letters:[],positions:[]},
       },
       
       Error:{error:0,error_msg:"Erreur"},
@@ -43,33 +45,24 @@ export default {
       }
     ,
     Initialisation(){
-
-      // Boucler 5 fois pour créer 5 sous-arrays
       for (let i = 0; i < this.Game.try; i++) {
-        // Créer un array vide pour chaque sous-array
-        let arrayEnfant = [];
-        // Boucler 2 fois pour ajouter 2 éléments à chaque sous-array
-        for (let j = 0; j < this.Game.word.length; j++) {
-          // Ajouter un élément à chaque sous-array
-          arrayEnfant.push(' ');
-        }
-        // Ajouter le sous-array rempli au tableau parent
-        this.User.Letters.push(arrayEnfant);
-      }
-      // Afficher le tableau parent et ses sous-arrays
-
-      
+      this.Grid.rows.push({
+        letters: []
+      })
+    } 
+    // console.log(this.Grid.rows);
     this.AddFirstLetter()
-    console.log(this.User.Letters[0][1]);
     },
     async KeyboardListener(event){
       // console.log(this.User.Letters[this.Cursor.row]);
       console.log(event.key);
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
-          // this.User.Letters[this.Cursor.row].push(); 
-          this.User.Letters[this.Cursor.cell] = event.key;
-          this.Cursor.cell++;
+          // this.Grid.rows[this.Cursor.row].letters[this.Cursor.cell].push(); 
+          // this.Grid.ro[this.Cursor.cell] = event.key;
+          // this.Cursor.cell++;
+          console.log(this.Grid.rows);
+          this.Grid.rows[this.Cursor.row].letters.push(event.key);
         }  
       }
       // Si la touche suppr est press
@@ -88,7 +81,7 @@ export default {
                 this.ShowError("Bien joué c'est gagné");
                 //Check les lettres
             }
-            const check_len = this.User.Letters[this.Cursor.row].length
+            // const check_len = this.User.Letters[this.Cursor.row].length
             // console.log(this.CheckOneLetter(this.Game.letters_user[this.numligne][0],0));
               // for (let index = 0; index < this.Game.letters_user[this.numligne].length; index++) { 
               //     if(this.CheckOneLetter(this.Game.letters_user[this.numligne][index],index)){
@@ -113,18 +106,19 @@ export default {
     },
     //Ajoute la premiere lettre du mot en début de ligne
     AddFirstLetter(){
-      this.User.Letters[this.Cursor.row][0] = this.Game.word.split('')[0];
+      this.Grid.rows[0].letters.push('t');
     },
     //Passe à la ligne suivante 
     IncrementRow(){
       this.Cursor.row++;
     },
     CheckRowIsFilled(){
-      if(this.User.Letters[this.Cursor.row].length != this.Game.word.length){
-        return false;
-      } else {
-        return true;
-      }
+      return false;
+      // if(this.User.Letters[this.Cursor.row].length != this.Game.word.length){
+      //   return false;
+      // } else {
+      //   return true;
+      // }
     },
     //Affiche une erreur avec son message
     ShowError(msg){
@@ -182,19 +176,22 @@ export default {
   <!-- {{ [this.User.Letters][0][0] }}  -->
   <!-- {{ [this.User.Letters[this.Cursor.row]][0][this.Cursor.cell] }} -->
   <!-- {{  this.User.Letters[this.Cursor.row][this.Cursor.cell] }} -->
-    <div class="grid" >
-        <!-- <div class="row" v-for="row in this.Game.try"> 
-            <div  v-for="(letter, index) in this.Game.word.length" :key="index"> 
-              <Cell class="cell" :letter='this.User.Letters[this.Cursor.row][index] ? this.User.Letters[this.Cursor.row][0][index] : "" ' />
+    <!-- <div class="grid" >
+        <div class="row" v-for="row in this.Game.try"> 
+            <div  v-for="index in this.Game.word.length" :key="index"> 
+              <Cell class="cell" :letter='this.Grid.rows[row].letters[index]' />
             </div>
-        </div> -->
-    </div>
-    <!-- {{ this.User.Letters[0] }}  -->
-    <div class="test" v-for="row in this.User.">
-      Ligne {{ row-1 }} :
-      <div class="" v-for="(letter, index) in this.Game.word.length" :key="index">
-         Lettre{{ index }} : {{ this.User.Letters[1] }}
-      </div>
+        </div>
+    </div> -->
+    <!-- {{ this.User.Letters }}  -->
+    <div class="test" v-for="rauw in this.Game.try">
+      <!-- {{ rauw - 1 }} -->
+      {{ this.Grid.rows }}
+      <!-- <div class="kk" v-for="cel in this.Game.word.length" :key="index"> -->
+        <!-- <p>{{ this.User.Letters[0] }}</p> -->
+         <!-- {{ index }} -->
+         <!-- {{ a = this.User.Letters[0] }} -->
+      <!-- </div> -->
     </div> 
 
     <!-- <div class="test" v-for="row in this.Game.try">
@@ -207,6 +204,11 @@ export default {
 
 
 <style scoped>
+
+.kk{
+  display: flex;
+  flex-direction: column;
+}
 
 .test{
   display: flex;
