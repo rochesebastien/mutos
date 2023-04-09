@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       Game:{
-        word: "tg",
+        word: "test",
         try:5,
       },
       Cursor:{
@@ -34,10 +34,12 @@ export default {
   },
   methods:{
     CheckOneLetter(lettre,position){
-      // console.log(position);
-     
-      if(lettre == this.word.split('')[position]){
-        console.log(lettre +" : "+ position);
+      // console.log(position-1);
+      if(lettre == this.Game.word.split('')[position]){
+        this.User.letterFound.letters.push(lettre);
+        this.User.letterFound.positions.push(position);
+        console.log(this.User.letterFound.letters);
+        console.log(this.User.letterFound.positions);
         return true;
       } else {
         return false;
@@ -50,18 +52,14 @@ export default {
         letters: []
       })
     } 
-    // console.log(this.Grid.rows);
     this.AddFirstLetter()
     },
     async KeyboardListener(event){
-      // console.log(this.User.Letters[this.Cursor.row]);
-      console.log(event.key);
+      console.log("Lettre"+this.User.letterFound.letters);
+      console.log("Positions"+this.User.letterFound.positions);
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
-          // this.Grid.rows[this.Cursor.row].letters[this.Cursor.cell].push(); 
-          // this.Grid.ro[this.Cursor.cell] = event.key;
-          // this.Cursor.cell++;
-          console.log(this.Grid.rows);
+          this.Cursor.cell++;
           this.Grid.rows[this.Cursor.row].letters.push(event.key);
         }  
       }
@@ -75,20 +73,15 @@ export default {
           if (this.CheckNoTry()) {
             if(this.CheckRowIsFilled()){
            //Si le mot existe
-          // if(await Repository.ExistInWords(this.Game.letters_user[this.numligne].join(''))){
-             if(true){
+          if(await Repository.ExistInWords(this.Grid.rows[this.Cursor.row].letters.join(''))){
             if(this.IfIsWord()){
                 this.ShowError("Bien joué c'est gagné");
                 //Check les lettres
             }
-            // const check_len = this.User.Letters[this.Cursor.row].length
-            // console.log(this.CheckOneLetter(this.Game.letters_user[this.numligne][0],0));
-              // for (let index = 0; index < this.Game.letters_user[this.numligne].length; index++) { 
-              //     if(this.CheckOneLetter(this.Game.letters_user[this.numligne][index],index)){
-              //       this.Game.LetterFound.letters.push(this.Game.letters_user[this.numligne][index]);
-              //       this.Game.LetterFound.positions.push(index);
-              //     }
-              //   }
+              for (let l = 0; l < this.Grid.rows[this.Cursor.row].letters.length; l++) {
+                const el = this.Grid.rows[this.Cursor.row].letters[l];
+                this.CheckOneLetter(el,l)
+              }
               this.IncrementRow();
               this.AddFirstLetter();
               
@@ -106,19 +99,19 @@ export default {
     },
     //Ajoute la premiere lettre du mot en début de ligne
     AddFirstLetter(){
-      this.Grid.rows[0].letters.push('t');
+      this.Grid.rows[this.Cursor.row].letters.push(this.Game.word.charAt(0));
     },
     //Passe à la ligne suivante 
     IncrementRow(){
       this.Cursor.row++;
+      this.Cursor.cell=1;
     },
     CheckRowIsFilled(){
-      return false;
-      // if(this.User.Letters[this.Cursor.row].length != this.Game.word.length){
-      //   return false;
-      // } else {
-      //   return true;
-      // }
+      if(this.Grid.rows[this.Cursor.row].letters.length != this.Game.word.length){
+        return false;
+      } else {
+        return true;
+      }
     },
     //Affiche une erreur avec son message
     ShowError(msg){
@@ -131,13 +124,13 @@ export default {
     },
     //Nettoie la ligne actuelle et ajoute la premier lettre
     CleanRow(){
-      this.Game.letters_user[this.numligne].length = 0
+      this.Grid.rows[this.Cursor.row].letters.length = 0
       this.AddFirstLetter();
-      console.log(this.Game.letters_user[this.numligne]);
+      this.Cursor.cell=1
     },
      //Si le nombre d'essaie est de 0 = perdu
     CheckNoTry(){
-        if(this.numligne+1 === this.Game.try){
+        if(this.Cursor.row === this.Game.try-1){
           return false;
         } else{
           return true;
@@ -145,22 +138,24 @@ export default {
     },
     //Enleve la dernière lettre écrite
     RemoveLast(){
-      if (this.Game.letters_user[this.numligne].length != 1) {
-                this.Game.letters_user[this.numligne].pop();
+      if (this.Grid.rows[this.Cursor.row].letters.length != 1) {
+        this.Grid.rows[this.Cursor.row].letters.pop();
         }
+        this.Cursor.cell--;
     },
     IfIsWord(){
-      if(this.User.Letters[this.Cursor.row].join('') == this.Game.word){
+      if(this.Grid.rows[this.Cursor.row].letters.join('') == this.Game.word){
        return true;
       } else {
         return false;
       }
     }
     },
-
+    created(){
+      this.Initialisation();
+    },
    mounted() {
     // const cells = document.querySelectorAll('.cell')
-    this.Initialisation();
     window.addEventListener("keypress", async (event) => {
       this.KeyboardListener(event);
       });
@@ -170,36 +165,26 @@ export default {
 
 <template>
   <Dialog :class="[this.Error.error != 0 ? 'dialog_see' : '']" :error_msg="this.Error.error_msg"/>
-   <!-- {{ [this.Cursor.cell] }} 
-  {{ [this.Cursor.row] }}  -->
-  
-  <!-- {{ [this.User.Letters][0][0] }}  -->
-  <!-- {{ [this.User.Letters[this.Cursor.row]][0][this.Cursor.cell] }} -->
-  <!-- {{  this.User.Letters[this.Cursor.row][this.Cursor.cell] }} -->
-    <!-- <div class="grid" >
-        <div class="row" v-for="row in this.Game.try"> 
-            <div  v-for="index in this.Game.word.length" :key="index"> 
-              <Cell class="cell" :letter='this.Grid.rows[row].letters[index]' />
+    <div class="grid" >
+        <div class="row" v-for="i in this.Game.try"> 
+            <div  v-for="j in this.Game.word.length"> 
+              <Cell :class="this.Grid.rows[i - 1].letters[j - 1] != ''  && this.User.letterFound.positions[j-1] === j-1 && this.User.letterFound.letters[j-1] != '' ? 'cell found' : 'cell'" :letter=' this.Grid.rows[i - 1].letters[j - 1]' />
+              <!-- <Cell class="cell" :letter=' this.Grid.rows[i - 1].letters[j - 1]' /> -->
             </div>
         </div>
-    </div> -->
-    <!-- {{ this.User.Letters }}  -->
+    </div>
     <div class="test" v-for="rauw in this.Game.try">
-      <!-- {{ rauw - 1 }} -->
-      {{ this.Grid.rows }}
-      <!-- <div class="kk" v-for="cel in this.Game.word.length" :key="index"> -->
-        <!-- <p>{{ this.User.Letters[0] }}</p> -->
-         <!-- {{ index }} -->
-         <!-- {{ a = this.User.Letters[0] }} -->
-      <!-- </div> -->
+      <!-- {{ this.Grid.rows }} -->
     </div> 
-
-    <!-- <div class="test" v-for="row in this.Game.try">
-      Mot de l'utilisateur :
-      <div class="" v-for="(letter, index) in length" :key="index">
-         {{ this.Game.letters_user[row-1][index] }}
+    {{ this.Cursor.row }}
+    <div class="test" v-for="rr in this.Game.try">
+      <div class="" v-for="cc in this.Game.word.length">
+        {{ this.Grid.rows[rr - 1].letters[cc - 1] }}
+        <!-- {{ this.User.letterFound.letters[kk-1] }} -->
+        
+       <!-- {{  this.User.letterFound.positions[kk-1] }} -->
       </div>
-    </div>-->
+    </div>
 </template>
 
 
