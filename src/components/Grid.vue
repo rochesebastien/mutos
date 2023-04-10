@@ -34,12 +34,27 @@ export default {
   },
   methods:{
     CheckOneLetter(lettre,position){
+      const word_array =  this.Game.word.split('');
       // console.log(position-1);
-      if(lettre == this.Game.word.split('')[position]){
-        this.User.letterFound.letters.push(lettre);
-        this.User.letterFound.positions.push(position);
-        console.log(this.User.letterFound.letters);
-        console.log(this.User.letterFound.positions);
+      if(lettre == word_array[position]){
+        // Si cette lettre a déjà été trouver au moins 1 fois dans le mot 
+        if(this.User.letterFound.letters.includes(lettre)){
+          // Si elle a été trouver au meme endroit qu'avant
+          console.log(this.User.letterFound.letters.indexOf(lettre));
+          if (this.User.letterFound.positions.includes(position)) {
+            console.log("Lettre "+lettre+"déjà trouvée");
+          } else {
+            this.User.letterFound.letters.push(lettre);
+            this.User.letterFound.positions.push(position);
+          }
+        } else {
+          console.log("tg");
+          this.User.letterFound.letters.push(lettre);
+          this.User.letterFound.positions.push(position);
+        }
+
+        // console.log(this.User.letterFound.letters);
+        // console.log(this.User.letterFound.positions);
         return true;
       } else {
         return false;
@@ -55,8 +70,9 @@ export default {
     this.AddFirstLetter()
     },
     async KeyboardListener(event){
-      console.log("Lettre"+this.User.letterFound.letters);
-      console.log("Positions"+this.User.letterFound.positions);
+      // console.log("Curseur : "+this.Cursor.cell);
+      // console.log("Lettre"+this.User.letterFound.letters);
+      // console.log("Positions"+this.User.letterFound.positions);
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
           this.Cursor.cell++;
@@ -168,7 +184,7 @@ export default {
     <div class="grid" >
         <div class="row" v-for="i in this.Game.try"> 
             <div  v-for="j in this.Game.word.length"> 
-              <Cell :class="this.Grid.rows[i - 1].letters[j - 1] != ''  && this.User.letterFound.positions[j-1] === j-1 && this.User.letterFound.letters[j-1] != '' ? 'cell found' : 'cell'" :letter=' this.Grid.rows[i - 1].letters[j - 1]' />
+              <Cell :class="this.Grid.rows[i - 1].letters[j - 1]   && this.User.letterFound.positions[j-1] === j-1 && this.User.letterFound.letters[j-1] === this.Grid.rows[i - 1].letters[j - 1] ? 'cell found' : 'cell'" :letter=" this.Grid.rows[i - 1].letters[j - 1] ? this.Grid.rows[i - 1].letters[j - 1] : ''"/>
               <!-- <Cell class="cell" :letter=' this.Grid.rows[i - 1].letters[j - 1]' /> -->
             </div>
         </div>
@@ -176,10 +192,11 @@ export default {
     <div class="test" v-for="rauw in this.Game.try">
       <!-- {{ this.Grid.rows }} -->
     </div> 
-    {{ this.Cursor.row }}
+    {{ this.User.letterFound.letters }}
+    {{ this.User.letterFound.positions }}
     <div class="test" v-for="rr in this.Game.try">
       <div class="" v-for="cc in this.Game.word.length">
-        {{ this.Grid.rows[rr - 1].letters[cc - 1] }}
+        <!-- {{ this.Grid.rows[rr - 1].letters[cc - 1]  ? 'oui' : 'non' }} -->
         <!-- {{ this.User.letterFound.letters[kk-1] }} -->
         
        <!-- {{  this.User.letterFound.positions[kk-1] }} -->
