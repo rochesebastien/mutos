@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       Game:{
-        word: "test",
+        word: "meler",
         try:5,
       },
       Cursor:{
@@ -33,41 +33,48 @@ export default {
     };
   },
   methods:{
-    CheckOneLetter(lettre,position){
+    CheckFoundLetter(lettre,position){
       const word_array =  this.Game.word.split('');
       // console.log(position-1);
+      // Si la lettre est à la meme position dans le mot
       if(lettre == word_array[position]){
         // Si cette lettre a déjà été trouver au moins 1 fois dans le mot 
         if(this.User.letterFound.letters.includes(lettre)){
-          // Si elle a été trouver au meme endroit qu'avant
           console.log(this.User.letterFound.letters.indexOf(lettre));
+          // Si la position de cette lettre a déja été trouvé
           if (this.User.letterFound.positions.includes(position)) {
             console.log("Lettre "+lettre+"déjà trouvée");
+            // return false;
           } else {
             this.User.letterFound.letters.push(lettre);
             this.User.letterFound.positions.push(position);
+            return true;
           }
-        } else {
-          console.log("tg");
+        } else { 
           this.User.letterFound.letters.push(lettre);
           this.User.letterFound.positions.push(position);
+          return true;
         }
-
-        // console.log(this.User.letterFound.letters);
-        // console.log(this.User.letterFound.positions);
-        return true;
       } else {
         return false;
-      }      
-      }
-    ,
+      }   
+      },
+      CheckGuessedLetter(lettre,position){
+        const word_array =  this.Game.word.split('');
+        if(word_array.includes(lettre)){
+          this.User.letterGuessed.letters.push(lettre);
+          this.User.letterGuessed.positions.push(position);
+        }
+      },
     Initialisation(){
       for (let i = 0; i < this.Game.try; i++) {
       this.Grid.rows.push({
         letters: []
       })
     } 
-    this.AddFirstLetter()
+    this.User.letterFound.letters.push(this.Game.word.charAt(0));
+    this.User.letterFound.positions.push(0);
+    this.AddFirstLetter();
     },
     async KeyboardListener(event){
       // console.log("Curseur : "+this.Cursor.cell);
@@ -96,7 +103,10 @@ export default {
             }
               for (let l = 0; l < this.Grid.rows[this.Cursor.row].letters.length; l++) {
                 const el = this.Grid.rows[this.Cursor.row].letters[l];
-                this.CheckOneLetter(el,l)
+                if(this.CheckFoundLetter(el,l) == false){
+                  this.CheckGuessedLetter(el,l)
+                }
+                
               }
               this.IncrementRow();
               this.AddFirstLetter();
@@ -184,24 +194,35 @@ export default {
     <div class="grid" >
         <div class="row" v-for="i in this.Game.try"> 
             <div  v-for="j in this.Game.word.length"> 
-              <Cell :class="this.Grid.rows[i - 1].letters[j - 1]   && this.User.letterFound.positions[j-1] === j-1 && this.User.letterFound.letters[j-1] === this.Grid.rows[i - 1].letters[j - 1] ? 'cell found' : 'cell'" :letter=" this.Grid.rows[i - 1].letters[j - 1] ? this.Grid.rows[i - 1].letters[j - 1] : ''"/>
-              <!-- <Cell class="cell" :letter=' this.Grid.rows[i - 1].letters[j - 1]' /> -->
+              <!-- <Cell :class="this.Grid.rows[i - 1].letters[j - 1]  && this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] === this.Grid.rows[i - 1].letters[j - 1] ? 'cell found' : 'cell'" :letter=" this.Grid.rows[i - 1].letters[j - 1] ? this.Grid.rows[i - 1].letters[j - 1] + ' ' + this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] : ''"/> -->
+              <!-- <Cell :class="this.Grid.rows[i - 1].letters[j - 1]  && this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] === this.Grid.rows[i - 1].letters[j - 1] ? 'cell found' : 'cell'" :letter=" this.Grid.rows[i - 1].letters[j - 1] ? this.Grid.rows[i - 1].letters[j - 1]  : ''"/> -->
+              <Cell v-if="this.Grid.rows[i - 1].letters[j - 1]  && this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] === this.Grid.rows[i - 1].letters[j - 1]" class="cell found" :letter=" this.Grid.rows[i - 1].letters[j - 1]"/>
+              <Cell v-else-if="this.User.letterGuessed.letters.includes(this.Grid.rows[i - 1].letters[j - 1])" class="cell exist" :letter=" this.Grid.rows[i - 1].letters[j - 1]"/>
+              <Cell v-else="!this.Grid.rows[i - 1].letters[j - 1]" class="cell" :letter=" this.Grid.rows[i - 1].letters[j - 1]"/>      
             </div>
         </div>
     </div>
-    <div class="test" v-for="rauw in this.Game.try">
+    <!-- <div class="test" v-for="rauw in this.Game.try"> -->
       <!-- {{ this.Grid.rows }} -->
-    </div> 
-    {{ this.User.letterFound.letters }}
-    {{ this.User.letterFound.positions }}
-    <div class="test" v-for="rr in this.Game.try">
-      <div class="" v-for="cc in this.Game.word.length">
-        <!-- {{ this.Grid.rows[rr - 1].letters[cc - 1]  ? 'oui' : 'non' }} -->
+    <!-- </div>  -->
+    {{ this.User.letterGuessed.letters }}
+    {{ this.User.letterGuessed.positions   }}
+    <!-- {{ this.User.letterFound.positions }} -->
+    <!-- <div class="test" v-for="rr in this.Game.try"> -->
+      <!-- <div class="test" v-for="cc in this.Game.word.length"> -->
+        <!-- case {{ +cc-1 }} :  -->
+        <!-- {{ this.User.letterFound.positions[cc-1] === cc+1 ? this.User.letterFound.positions[cc-1] : 'X  ' }} -->
+        <!-- {{ this.User.letterFound.positions[cc-1] === cc+1 ? this.User.letterFound.positions[cc-1] : 'X  ' }} -->
+         <!-- - ‎ -->
+         <!-- {{ this.User.letterFound.positions[cc-1] }} -  -->
+         <!-- {{ this.User.letterFound.positions.indexOf(cc-1) }} -->
+         <!-- {{ cc - 1 }} :  -->
+         <!-- {{ this.User.letterFound.letters[this.User.letterFound.positions.indexOf(cc-1)] }} -  -->
         <!-- {{ this.User.letterFound.letters[kk-1] }} -->
         
        <!-- {{  this.User.letterFound.positions[kk-1] }} -->
-      </div>
-    </div>
+      <!-- </div> -->
+    <!-- </div> -->
 </template>
 
 
@@ -220,10 +241,12 @@ export default {
 .grid{
     margin: 0 auto;
     display: grid;
-    font-size: 4rem;
+    /* font-size: 4rem; */
+    font-size: 1rem;
     text-transform: uppercase;
     font-family: 'Montserrat', sans-serif;
     border-right: 3px solid black;
+    border-top: 3px solid black;
 }
 
 .row{
