@@ -5,9 +5,9 @@
 
 <template>
     <nav class="navbar">
-        <a href="">
+        <router-link to="/">
             <img id="NavLogo" src="/Logo.svg" alt="" srcset="">
-        </a>   
+        </router-link> 
     </nav>
 </template>
 
@@ -20,6 +20,8 @@ nav{
    align-items: center;
    width: 100%;
    height: 130px;
+   position: absolute;
+   top: 80px;
 }
 
 #NavLogo{

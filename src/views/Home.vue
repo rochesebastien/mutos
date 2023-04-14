@@ -1,23 +1,33 @@
 <script setup>
-defineProps({
-    value: String,
-    link: String,
-  }); 
-  
+import Button from '../components/Button.vue';
 </script>
 
 <template>
-    <div v-if="link" class="form_btn">
-            <router-link :to="link" class="btn">{{ value }}</router-link>
-        </div>
-    <div v-else class="form_btn">
-            <button class="btn">{{ value }}</button>
+<div class="home_ctn">
+    <div class="home_form">
+        <Button :value="'Mot du jour'" :link="'/game'"></Button>
+        <Button :value="'Suite du jour'" :link="'/game'"></Button>
+        <Button :value="'Mots infinis'" :link="'/game'"></Button>
+        <Button :value="'Paramètres'" :link="'/settings'"></Button>
+        <Button :value="'Règles du jeu'" :link="'/rules'"></Button>
     </div>
+</div>
 </template>
 
+<style>
+.home_ctn{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-<style scoped>
-.form_btn{
+
+.home_form{
+    padding-top: 100px;
+}
+
+/* .form_btn{
     width: 300px;
     display: flex;
     justify-content: center;
@@ -40,7 +50,6 @@ defineProps({
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
 }
 
 .btn:hover{
@@ -48,5 +57,6 @@ defineProps({
     background: #E95838;
     box-shadow: 0 4px #323031;
     margin-top:5px
-}
+} */
+
 </style>

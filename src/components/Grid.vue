@@ -16,6 +16,7 @@ export default {
       Game:{
         word: "meler",
         try:5,
+        status:"playing",
       },
       Cursor:{
         row:0,
@@ -98,7 +99,7 @@ export default {
            //Si le mot existe
           if(await Repository.ExistInWords(this.Grid.rows[this.Cursor.row].letters.join(''))){
             if(this.IfIsWord()){
-                this.ShowError("Bien joué c'est gagné");
+                this.Game.status='won'
                 //Check les lettres
             }
               for (let l = 0; l < this.Grid.rows[this.Cursor.row].letters.length; l++) {
@@ -119,7 +120,7 @@ export default {
           this.ShowError("Remplissez d'abord la ligne");
         }
           } else {
-            this.ShowError("C'est perdu");
+            this.Game.status='lost'
           }
       }          
     },
@@ -191,7 +192,7 @@ export default {
 
 <template>
   <Dialog :class="[this.Error.error != 0 ? 'dialog_see' : '']" :error_msg="this.Error.error_msg"/>
-    <div class="grid" >
+    <div v-if="this.Game.status=='playing'" class="grid" >
         <div class="row" v-for="i in this.Game.try"> 
             <div  v-for="j in this.Game.word.length"> 
               <!-- <Cell :class="this.Grid.rows[i - 1].letters[j - 1]  && this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] === this.Grid.rows[i - 1].letters[j - 1] ? 'cell found' : 'cell'" :letter=" this.Grid.rows[i - 1].letters[j - 1] ? this.Grid.rows[i - 1].letters[j - 1] + ' ' + this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] : ''"/> -->
@@ -202,11 +203,13 @@ export default {
             </div>
         </div>
     </div>
+    <div v-else-if="this.Game.status=='won'"> Bien joué c'est gagné</div>
+    <div v-else>C'est perdu ;/</div>
     <!-- <div class="test" v-for="rauw in this.Game.try"> -->
       <!-- {{ this.Grid.rows }} -->
     <!-- </div>  -->
-    {{ this.User.letterGuessed.letters }}
-    {{ this.User.letterGuessed.positions   }}
+    <!-- {{ this.User.letterGuessed.letters }}
+    {{ this.User.letterGuessed.positions   }} -->
     <!-- {{ this.User.letterFound.positions }} -->
     <!-- <div class="test" v-for="rr in this.Game.try"> -->
       <!-- <div class="test" v-for="cc in this.Game.word.length"> -->
