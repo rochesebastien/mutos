@@ -18,7 +18,6 @@ defineProps({
 
 <style scoped>
 .form_btn{
-    width: 300px;
     display: flex;
     justify-content: center;
     height: 55px;

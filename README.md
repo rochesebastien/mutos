@@ -1,7 +1,7 @@
 
 # Mutos - Wordle-based online game using Vue 3
 
-🎯 Play and try to find the word on https://mutos.vercel.app
+🎯 Play and try to find the word on https://mutosgame.vercel.app
 
 -----------------  
   
@@ -57,5 +57,5 @@ The inspiration for this project came from these sites which are similar project
 Don't hesitate to take a look 👋  
 
 -----------------  
-  
-© Roche Sébastien 
+
+© Roche Sébastien - [Portfolio](https://sebastien-roche.fr) - [Linkedin](https://www.linkedin.com/in/sebasti1roche/)

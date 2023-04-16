@@ -21,9 +21,9 @@ defineProps({
     z-index: 1;
     display: flex;
     justify-content: center;
-    /* margin-top: 200px; */
     align-items: center;
     top: 30px;
+    left: 0;
     opacity: 0;
     transition: 0.1s ease-in;
     transform: translateY(0px);

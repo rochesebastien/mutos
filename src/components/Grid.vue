@@ -5,17 +5,19 @@ import { ref } from 'vue';
 import { createApp } from 'vue';
 import Repository from '../data/Repository';
 import Dialog from './Dialog.vue';
+import Chrono from './Chrono.vue';
 
 export default {
   components: {
     Cell,
     Dialog,
+    Chrono,
   },
   data() {
     return {
       Game:{
-        word: "meler",
-        try:5,
+        word: "connard",
+        try:6,
         status:"playing",
       },
       Cursor:{
@@ -41,11 +43,9 @@ export default {
       if(lettre == word_array[position]){
         // Si cette lettre a déjà été trouver au moins 1 fois dans le mot 
         if(this.User.letterFound.letters.includes(lettre)){
-          console.log(this.User.letterFound.letters.indexOf(lettre));
           // Si la position de cette lettre a déja été trouvé
           if (this.User.letterFound.positions.includes(position)) {
-            console.log("Lettre "+lettre+"déjà trouvée");
-            // return false;
+            return false;
           } else {
             this.User.letterFound.letters.push(lettre);
             this.User.letterFound.positions.push(position);
@@ -62,10 +62,49 @@ export default {
       },
       CheckGuessedLetter(lettre,position){
         const word_array =  this.Game.word.split('');
-        if(word_array.includes(lettre)){
-          this.User.letterGuessed.letters.push(lettre);
-          this.User.letterGuessed.positions.push(position);
+        
+        // Nombre de fois que la lettre est présente dans le mot 
+        let nbLetterInWord = 0
+        word_array.forEach(el => {
+        if (lettre === el) {
+          nbLetterInWord++
         }
+      })
+      // Si la lettre est présente une fois ou plus
+      if (nbLetterInWord >= 1) {
+        let nbLetterFound = 0
+        // Je vérifie si la lettre a été trouvé dans le mot 
+        for (let i = 0; i < word_array.length; i++) {
+          if(this.User.letterFound.positions.includes(i)){
+            if (this.User.letterFound.letters[this.User.letterFound.positions.indexOf(i)] === lettre) {
+              nbLetterFound++
+          }
+          }
+        }
+
+        // Si le nombre de lettre trouvé est >= au nombre de lettre dans le mot alors toutes les lettres sont trouvées
+        if (nbLetterFound >= nbLetterInWord) {
+          return false
+        }
+
+        // Je récup le nombre fois que la lettre a été écrite avant la lettre trouvé
+        let Poscount = 0
+        for (let i = 0; i < position; i++) {
+          if (this.Grid.rows[this.Cursor.row].letters[i] === lettre) {
+            Poscount++
+          }
+        }
+
+        // Et je regarde si le nombre de fois trouvé est < à au nombre de lettres de lettres dans le mot
+        if (Poscount < nbLetterInWord) {
+          this.User.letterGuessed.letters.push(lettre)
+          this.User.letterGuessed.positions.push(position)
+        }
+      }
+
+
+
+
       },
     Initialisation(){
       for (let i = 0; i < this.Game.try; i++) {
@@ -78,9 +117,6 @@ export default {
     this.AddFirstLetter();
     },
     async KeyboardListener(event){
-      // console.log("Curseur : "+this.Cursor.cell);
-      // console.log("Lettre"+this.User.letterFound.letters);
-      // console.log("Positions"+this.User.letterFound.positions);
       if(/^[a-z]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
           this.Cursor.cell++;
@@ -96,18 +132,21 @@ export default {
           //Si la ligne est full
           if (this.CheckNoTry()) {
             if(this.CheckRowIsFilled()){
+            // if(true){
            //Si le mot existe
           if(await Repository.ExistInWords(this.Grid.rows[this.Cursor.row].letters.join(''))){
+          // if(true){
             if(this.IfIsWord()){
                 this.Game.status='won'
                 //Check les lettres
             }
               for (let l = 0; l < this.Grid.rows[this.Cursor.row].letters.length; l++) {
                 const el = this.Grid.rows[this.Cursor.row].letters[l];
-                if(this.CheckFoundLetter(el,l) == false){
-                  this.CheckGuessedLetter(el,l)
-                }
-                
+              this.CheckFoundLetter(el,l)
+              }
+              for (let l = 0; l < this.Grid.rows[this.Cursor.row].letters.length; l++) {
+                const el = this.Grid.rows[this.Cursor.row].letters[l];
+                  this.CheckGuessedLetter(el,l)             
               }
               this.IncrementRow();
               this.AddFirstLetter();
@@ -170,6 +209,7 @@ export default {
         }
         this.Cursor.cell--;
     },
+    // Vérifie si c'est le bon mot
     IfIsWord(){
       if(this.Grid.rows[this.Cursor.row].letters.join('') == this.Game.word){
        return true;
@@ -182,7 +222,6 @@ export default {
       this.Initialisation();
     },
    mounted() {
-    // const cells = document.querySelectorAll('.cell')
     window.addEventListener("keypress", async (event) => {
       this.KeyboardListener(event);
       });
@@ -195,37 +234,15 @@ export default {
     <div v-if="this.Game.status=='playing'" class="grid" >
         <div class="row" v-for="i in this.Game.try"> 
             <div  v-for="j in this.Game.word.length"> 
-              <!-- <Cell :class="this.Grid.rows[i - 1].letters[j - 1]  && this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] === this.Grid.rows[i - 1].letters[j - 1] ? 'cell found' : 'cell'" :letter=" this.Grid.rows[i - 1].letters[j - 1] ? this.Grid.rows[i - 1].letters[j - 1] + ' ' + this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] : ''"/> -->
-              <!-- <Cell :class="this.Grid.rows[i - 1].letters[j - 1]  && this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] === this.Grid.rows[i - 1].letters[j - 1] ? 'cell found' : 'cell'" :letter=" this.Grid.rows[i - 1].letters[j - 1] ? this.Grid.rows[i - 1].letters[j - 1]  : ''"/> -->
               <Cell v-if="this.Grid.rows[i - 1].letters[j - 1]  && this.User.letterFound.letters[this.User.letterFound.positions.indexOf(j-1)] === this.Grid.rows[i - 1].letters[j - 1]" class="cell found" :letter=" this.Grid.rows[i - 1].letters[j - 1]"/>
-              <Cell v-else-if="this.User.letterGuessed.letters.includes(this.Grid.rows[i - 1].letters[j - 1])" class="cell exist" :letter=" this.Grid.rows[i - 1].letters[j - 1]"/>
+              <Cell v-else-if="this.User.letterGuessed.letters.includes(this.Grid.rows[i - 1].letters[j - 1]) && this.Cursor.row >= i" class="cell exist" :letter=" this.Grid.rows[i - 1].letters[j - 1]"/>
               <Cell v-else="!this.Grid.rows[i - 1].letters[j - 1]" class="cell" :letter=" this.Grid.rows[i - 1].letters[j - 1]"/>      
             </div>
         </div>
     </div>
     <div v-else-if="this.Game.status=='won'"> Bien joué c'est gagné</div>
     <div v-else>C'est perdu ;/</div>
-    <!-- <div class="test" v-for="rauw in this.Game.try"> -->
-      <!-- {{ this.Grid.rows }} -->
-    <!-- </div>  -->
-    <!-- {{ this.User.letterGuessed.letters }}
-    {{ this.User.letterGuessed.positions   }} -->
-    <!-- {{ this.User.letterFound.positions }} -->
-    <!-- <div class="test" v-for="rr in this.Game.try"> -->
-      <!-- <div class="test" v-for="cc in this.Game.word.length"> -->
-        <!-- case {{ +cc-1 }} :  -->
-        <!-- {{ this.User.letterFound.positions[cc-1] === cc+1 ? this.User.letterFound.positions[cc-1] : 'X  ' }} -->
-        <!-- {{ this.User.letterFound.positions[cc-1] === cc+1 ? this.User.letterFound.positions[cc-1] : 'X  ' }} -->
-         <!-- - ‎ -->
-         <!-- {{ this.User.letterFound.positions[cc-1] }} -  -->
-         <!-- {{ this.User.letterFound.positions.indexOf(cc-1) }} -->
-         <!-- {{ cc - 1 }} :  -->
-         <!-- {{ this.User.letterFound.letters[this.User.letterFound.positions.indexOf(cc-1)] }} -  -->
-        <!-- {{ this.User.letterFound.letters[kk-1] }} -->
-        
-       <!-- {{  this.User.letterFound.positions[kk-1] }} -->
-      <!-- </div> -->
-    <!-- </div> -->
+    <Chrono/>
 </template>
 
 
@@ -244,8 +261,8 @@ export default {
 .grid{
     margin: 0 auto;
     display: grid;
-    /* font-size: 4rem; */
-    font-size: 1rem;
+    font-size: 4rem;
+    /* font-size: 1rem; */
     text-transform: uppercase;
     font-family: 'Montserrat', sans-serif;
     border-right: 3px solid black;

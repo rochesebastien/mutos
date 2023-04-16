@@ -1,15 +1,24 @@
-<script setup>
+<script>
 import Button from '../components/Button.vue';
+import Chrono from '../components/Chrono.vue';
+export default {
+  components: {
+    Button,
+    Chrono
+  }
+}
+
 </script>
 
 <template>
 <div class="home_ctn">
+    
     <div class="home_form">
-        <Button :value="'Mot du jour'" :link="'/game'"></Button>
-        <Button :value="'Suite du jour'" :link="'/game'"></Button>
-        <Button :value="'Mots infinis'" :link="'/game'"></Button>
-        <Button :value="'Paramètres'" :link="'/settings'"></Button>
-        <Button :value="'Règles du jeu'" :link="'/rules'"></Button>
+        <Button :value="'Mot du jour'" :link="'/game'" />
+        <Button :value="'Suite du jour'" :link="'/game'" />
+        <Button :value="'Mots infinis'" :link="'/game'" />
+        <Button :value="'Paramètres'" :link="'/settings'" />
+        <Button :value="'Règles du jeu'" :link="'/rules'" />
     </div>
 </div>
 </template>

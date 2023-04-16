@@ -4,13 +4,13 @@ import Grid from '../components/Grid.vue';
 </script>
 
 <template>
-    <div>
+    <div class="game_ctn">
         <Grid />
     </div>
 </template>
 
 <style>
-h1{
-  color: red;
+.game_ctn{
+  padding-top: 100px;
 }
 </style>
