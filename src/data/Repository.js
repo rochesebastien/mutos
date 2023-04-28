@@ -1,3 +1,5 @@
+import FrenchWords  from "./words.json"
+
 export default {
 
     // ? Transforme tous les caractères spéciaux (accents) en caractère sans accent
@@ -31,11 +33,8 @@ export default {
      // ? Récupère un Array de la liste de mots français existants
      async ExistInWords(userWord) {
       try {
-      const response = await fetch("/src/data/gutenberg.txt");
-      const text = await response.text();
-      const wordArray = text.split("\n").map((word) => this.removeAccents(word.trim()));
       // ? Vérifie si le mot existe dans la liste de mots
-      if (wordArray.includes(this.removeAccents(userWord))) {
+      if (FrenchWords.words.includes(this.removeAccents(userWord))) {
         console.log("Le mot "+this.removeAccents(userWord)+" existe !");
         return true;
       } else {
