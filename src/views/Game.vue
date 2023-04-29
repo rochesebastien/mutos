@@ -1,6 +1,6 @@
 <script setup>
 import Grid from '../components/Grid.vue';
-
+import Repository from '../data/Repository';
 </script>
 
 <template>

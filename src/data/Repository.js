@@ -1,4 +1,4 @@
-import FrenchWords  from "./words.json"
+import json  from "./words.json"
 
 export default {
 
@@ -34,7 +34,7 @@ export default {
      async ExistInWords(userWord) {
       try {
       // ? Vérifie si le mot existe dans la liste de mots
-      if (FrenchWords.words.includes(this.removeAccents(userWord))) {
+      if (json.words.includes(this.removeAccents(userWord))) {
         console.log("Le mot "+this.removeAccents(userWord)+" existe !");
         return true;
       } else {
@@ -45,4 +45,13 @@ export default {
       console.log(error);
       }
       },
+      async RandomWord() {
+        try {
+          const random = Math.floor(Math.random() * json.words.length);
+          console.log(json.words[random]);
+          return json.words[random];
+        } catch(error) {
+        console.log(error);
+        }
+        },
   };

@@ -106,7 +106,7 @@ export default {
 
 
       },
-    Initialisation(){
+     Initialisation(){
       for (let i = 0; i < this.Game.try; i++) {
       this.Grid.rows.push({
         letters: []
@@ -124,7 +124,7 @@ export default {
         }  
       }
       // Si la touche suppr est press
-      if (event.key == 'Backspace' || event.key == 'Delete') {
+      if (event.key == 'BACKSPACE' || event.key == 'Delete' || event.key == 'Backspace') {
         // Enlève la derniere lettre
         this.RemoveLast();
       // Si la touche entrée est press
