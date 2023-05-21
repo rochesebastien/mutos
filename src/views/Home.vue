@@ -14,9 +14,9 @@ export default {
 <div class="home_ctn">
     
     <div class="home_form">
-        <Button :value="'Mot du jour'" :link="'/game'" />
-        <Button :value="'Suite du jour'" :link="'/game'" />
-        <Button :value="'Mots infinis'" :link="'/game'" />
+        <Button :value="'Mot du jour'" :link="'/game/day'" />
+        <Button :value="'Suite du jour'" :link="'/game/suite'" />
+        <Button :value="'Mots infinis'" :link="'/game/infinite'" />
         <Button :value="'Paramètres'" :link="'/settings'" />
         <Button :value="'Règles du jeu'" :link="'/rules'" />
     </div>

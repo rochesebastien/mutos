@@ -7,33 +7,38 @@ import Error from './views/Error.vue'
 
 const routes = [
   {
-    path: '/home',
-    name: 'Home',
+    path: '/',
     component: Home
   },
   {
-    path: '/game',
-    name: 'Game',
-    component: Game
+    path: '/game/day',
+    component: Game,
+    props: { mode: 'day' }
+  },
+  {
+    path: '/game/suite',
+    component: Game,
+    props: { mode: 'suite' }
+  },
+  {
+    path: '/game/infinite',
+    component: Game,
+    props: { mode: 'infinite' }
   },
   {
     path: '/settings',
-    name: 'Settings',
     component: Settings
   },
   {
     path: '/rules',
-    name: 'Rules',
     component: Rules
   },
   {
     path: '',
-    name: 'Home',
     component: Home
   },
   {
     path: '/',
-    name: 'Home',
     component: Home
   },
   {
@@ -47,7 +52,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes    
 })
 
 export default router
