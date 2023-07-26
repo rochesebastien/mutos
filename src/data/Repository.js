@@ -31,19 +31,39 @@ export default {
      // ? Récupère un Array de la liste de mots français existants
      async ExistInWords(userWord) {
       try {
-      const response = await fetch("/src/data/gutenberg.txt");
-      const text = await response.text();
-      const wordArray = text.split("\n").map((word) => this.removeAccents(word.trim()));
+      const response = await fetch("https://french-words-api.vercel.app/words");
+      const words = await response.text();
+
       // ? Vérifie si le mot existe dans la liste de mots
-      if (wordArray.includes(this.removeAccents(userWord))) {
-        console.log("Le mot "+this.removeAccents(userWord)+" existe !");
+      if (words.includes(this.removeAccents(userWord))) {
+        console.log(words.includes(this.removeAccents(userWord)));
         return true;
       } else {
-        console.log("Le mot "+this.removeAccents(userWord)+" n'existe pas.");
+        console.log(words.includes(this.removeAccents(userWord)));
         return false;
       }
       } catch(error) {
       console.log(error);
       }
       },
+
+      async getRandomWord(){
+        try {
+          const response = await fetch("https://french-words-api.vercel.app/word");
+          const word = await response.text();
+          return word;
+          } catch(error) {
+          console.log(error);
+          }
+      },
+      async getDayWord(){
+        try {
+          const response = await fetch("https://french-words-api.vercel.app/day");
+          const word = await response.text();
+          return word;
+          } catch(error) {
+          console.log(error);
+          }
+      }
+
   };

@@ -12,9 +12,22 @@ const routes = [
     component: Home
   },
   {
-    path: '/game',
-    name: 'Game',
-    component: Game
+    path: '/day',
+    name: 'Day',
+    component: Game,
+    props: { mode: "day" }
+  },
+  {
+    path: '/daysuite',
+    name: 'DaySuite',
+    component: Game,
+    props: { mode: "daysuite" }
+  },
+  {
+    path: '/infinite',
+    name: 'Infinite',
+    component: Game,
+    props: { mode: "infinite" }
   },
   {
     path: '/settings',

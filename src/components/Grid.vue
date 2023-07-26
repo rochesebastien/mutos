@@ -13,10 +13,14 @@ export default {
     Dialog,
     Chrono,
   },
+  props: {
+    word: String,
+    mode:String
+  },
   data() {
     return {
       Game:{
-        word: "connard",
+        word: this.word,
         try:6,
         status:"playing",
       },
@@ -38,7 +42,6 @@ export default {
   methods:{
     CheckFoundLetter(lettre,position){
       const word_array =  this.Game.word.split('');
-      // console.log(position-1);
       // Si la lettre est à la meme position dans le mot
       if(lettre == word_array[position]){
         // Si cette lettre a déjà été trouver au moins 1 fois dans le mot 
@@ -101,12 +104,9 @@ export default {
           this.User.letterGuessed.positions.push(position)
         }
       }
-
-
-
-
       },
     Initialisation(){
+      console.log(this.Game.word);
       for (let i = 0; i < this.Game.try; i++) {
       this.Grid.rows.push({
         letters: []
@@ -117,12 +117,13 @@ export default {
     this.AddFirstLetter();
     },
     async KeyboardListener(event){
-      if(/^[a-z]$/.test(event.key)){
+      if(/^[a-z-]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
           this.Cursor.cell++;
           this.Grid.rows[this.Cursor.row].letters.push(event.key);
         }  
       }
+
       // Si la touche suppr est press
       if (event.key == 'Backspace' || event.key == 'Delete') {
         // Enlève la derniere lettre
@@ -222,7 +223,7 @@ export default {
       this.Initialisation();
     },
    mounted() {
-    window.addEventListener("keypress", async (event) => {
+    window.addEventListener("keydown", async (event) => {
       this.KeyboardListener(event);
       });
   },

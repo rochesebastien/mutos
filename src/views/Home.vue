@@ -14,9 +14,9 @@ export default {
 <div class="home_ctn">
     
     <div class="home_form">
-        <Button :value="'Mot du jour'" :link="'/game'" />
-        <Button :value="'Suite du jour'" :link="'/game'" />
-        <Button :value="'Mots infinis'" :link="'/game'" />
+        <Button :value="'Mot du jour'" :link="'/day'" />
+        <Button :value="'Suite du jour'" :link="'/daysuite'" />
+        <Button :value="'Mots infinis'" :link="'/infinite'" />
         <Button :value="'Paramètres'" :link="'/settings'" />
         <Button :value="'Règles du jeu'" :link="'/rules'" />
     </div>
@@ -35,37 +35,5 @@ export default {
 .home_form{
     padding-top: 100px;
 }
-
-/* .form_btn{
-    width: 300px;
-    display: flex;
-    justify-content: center;
-    height: 55px;
-    margin-top:20px;
-    height:70px;
-}
-
-.btn{
-    text-decoration: none;
-    background-color: #fff;
-    font-family: 'Montserrat', sans-serif;
-    border-radius: 8px;
-    color: black;
-    box-shadow: 0 9px black;
-    margin-bottom: 20px;
-    width: 300px;
-    height:60px;
-    transition: 0.1s ease-in;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn:hover{
-    color: #F1F1F1;
-    background: #E95838;
-    box-shadow: 0 4px #323031;
-    margin-top:5px
-} */
 
 </style>

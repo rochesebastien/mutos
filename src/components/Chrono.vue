@@ -8,6 +8,9 @@ export default {
       isRunning: false,
     };
   },
+  created() {
+    this.start()
+  },
   computed: {
     formatTime() {
       const minutes = Math.floor(this.time / 60);
@@ -15,6 +18,7 @@ export default {
       return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     },
   },
+  
   methods: {
     start() {
       this.isRunning = true;
@@ -36,15 +40,23 @@ export default {
 </script>
 
 <template>
-    <div>
-      <h2>{{ formatTime }}</h2>
-      <button @click="start" v-if="!isRunning">Start</button>
+    <div class="chrono">
+      <h2>Votre temps : <span>{{ formatTime }}</span></h2>
+      <!-- <button @click="start" v-if="!isRunning">Start</button>
       <button @click="stop" v-if="isRunning">Stop</button>
-      <button @click="reset" v-if="!isRunning">Reset</button>
+      <button @click="reset" v-if="!isRunning">Reset</button> -->
     </div>
   </template>
   
- <style>
- /* Create a class for a button */
+ <style scoped>
+ .chrono {
+  margin-top: 0.7rem;
+ }
+ .chrono h2{
+  font-family: 'Montserrat', sans-serif;
+ }
+ .chrono h2 > span{
+  color: #E95838;
+ }
 
 </style>
