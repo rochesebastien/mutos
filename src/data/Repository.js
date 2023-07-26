@@ -1,32 +1,34 @@
+import json  from "./words.json"
+import axios from 'axios';
+const API_URL = 'http://localhost:3000';
+
 export default {
 
-    // ? Transforme tous les caractères spéciaux (accents) en caractère sans accent
-    removeAccents(str) {
-      const accents = [
-        { from: "à", to: "a" },
-        { from: "á", to: "a" },
-        { from: "â", to: "a" },
-        { from: "ä", to: "a" },
-        { from: "ç", to: "c" },
-        { from: "è", to: "e" },
-        { from: "é", to: "e" },
-        { from: "ê", to: "e" },
-        { from: "ë", to: "e" },
-        { from: "î", to: "i" },
-        { from: "ï", to: "i" },
-        { from: "ô", to: "o" },
-        { from: "ö", to: "o" },
-        { from: "ù", to: "u" },
-        { from: "ú", to: "u" },
-        { from: "û", to: "u" },
-        { from: "ü", to: "u" },
-        { from: "ÿ", to: "y" },
-      ];
-      for (let i = 0; i < accents.length; i++) {
-        str = str.replace(new RegExp(accents[i].from, "g"), accents[i].to);
-      }
-      return str;
+
+  async getWordExist(userWord) {
+    try {
+      const length = userWord.length
+      const firstLetter = userWord[0];
+      const response = await axios.get(`${API_URL}/word/${length}/${firstLetter}`);
+      const words = response.data;
+      // Vérifie si le mot de l'utilisateur est présent dans la liste des mots
+      const wordExists = words.includes(userWord.toLowerCase());
+      console.log(wordExists);
+      return wordExists;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  async getWordOfTheDay() {
+    try {
+      const response = await axios.get(`${API_URL}/day`);
+      const word = response.data;
+      return word;
+    } catch (error) {
+      console.log(error);
+    }
     },
+<<<<<<< HEAD
   
      // ? Récupère un Array de la liste de mots français existants
      async ExistInWords(userWord) {
@@ -67,3 +69,15 @@ export default {
       }
 
   };
+=======
+  async getListOfTheDay() {
+    try {
+      const response = await axios.get(`${API_URL}/list`);
+      const list = response.data;
+      return list;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+>>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd

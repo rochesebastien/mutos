@@ -1,7 +1,24 @@
 <script>
+<<<<<<< HEAD
 import Day from '../components/gamemode/Day.vue';
 import DaySuite from '../components/gamemode/DaySuite.vue';
 import Infinte from '../components/gamemode/Infinite.vue';
+=======
+import Grid from '../components/Grid.vue';
+import Repository from '../data/Repository';
+
+export default {
+  props: {
+    mode: String,
+  },
+  components: {
+    Grid
+  },
+  mounted(){
+    // console.log(this.mode);
+  }
+}
+>>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd
 
 export default {
   props: {
@@ -25,6 +42,7 @@ export default {
 </script>
 
 <template>
+<<<<<<< HEAD
   <div class="game_ctn">
       
       <!-- Add a loading indicator or any other content to show during API call -->
@@ -32,6 +50,11 @@ export default {
       <DaySuite v-if="game_mode=='daysuite'" />
       <Infinte v-if="game_mode=='infinite'" />
   </div>
+=======
+    <div class="game_ctn">
+        <Grid :mode="this.mode"/>
+    </div>
+>>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd
 </template>
 
 <style>

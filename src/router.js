@@ -7,8 +7,7 @@ import Error from './views/Error.vue'
 
 const routes = [
   {
-    path: '/home',
-    name: 'Home',
+    path: '/',
     component: Home
   },
   {
@@ -28,25 +27,35 @@ const routes = [
     name: 'Infinite',
     component: Game,
     props: { mode: "infinite" }
+    path: '/game/day',
+    component: Game,
+    props: { mode: 'day' }
+  },
+  {
+    path: '/game/suite',
+    component: Game,
+    props: { mode: 'suite' }
+  },
+  {
+    path: '/game/infinite',
+    component: Game,
+    props: { mode: 'infinite' }
+>>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd
   },
   {
     path: '/settings',
-    name: 'Settings',
     component: Settings
   },
   {
     path: '/rules',
-    name: 'Rules',
     component: Rules
   },
   {
     path: '',
-    name: 'Home',
     component: Home
   },
   {
     path: '/',
-    name: 'Home',
     component: Home
   },
   {
@@ -60,7 +69,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes    
 })
 
 export default router

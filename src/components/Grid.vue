@@ -8,6 +8,9 @@ import Dialog from './Dialog.vue';
 import Chrono from './Chrono.vue';
 
 export default {
+  props: {
+    mode: String,
+  },
   components: {
     Cell,
     Dialog,
@@ -20,9 +23,16 @@ export default {
   data() {
     return {
       Game:{
+<<<<<<< HEAD
         word: this.word,
         try:6,
+=======
+        mode:"day",
+>>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd
         status:"playing",
+        word: "",
+        list:[],
+        try:6,
       },
       Cursor:{
         row:0,
@@ -40,6 +50,42 @@ export default {
     };
   },
   methods:{
+    async Reset(){
+      console.log("Reset en cours");
+      this.Cursor.row = 0
+      this.Cursor.cell = 0
+      this.Grid.rows = []
+      this.User.letterFound.letters = []
+      this.User.letterFound.positions = []
+      this.User.letterGuessed.letters = []
+      this.User.letterGuessed.positions = []
+      for (let i = 0; i < this.Game.try; i++) {
+      this.Grid.rows.push({
+        letters: []
+      })
+    }
+    },
+    async Initialisation(){ 
+    this.Reset()
+    this.Game.mode = this.mode
+    console.log("Mode de jeu : "+this.Game.mode);
+    if(this.mode == "day"){
+      this.Game.word = await Repository.getWordOfTheDay()
+      console.log("Mot du jour : "+this.Game.word);
+      console.log("Mot du jour : " + this.Game.word + "\n");
+    } else if(this.mode == "suite"){
+      this.Game.list = await Repository.getListOfTheDay()
+      console.log("Liste du jour : " + this.Game.list + "\n");
+      this.Game.word = this.Game.list[0]
+      console.log("Premier mot de la suite  : "+this.Game.word);
+    }
+    
+
+    this.User.letterFound.letters.push(this.Game.word.charAt(0));
+    this.User.letterFound.positions.push(0);
+    this.AddFirstLetter();
+
+    },
     CheckFoundLetter(lettre,position){
       const word_array =  this.Game.word.split('');
       // Si la lettre est à la meme position dans le mot
@@ -84,12 +130,10 @@ export default {
           }
           }
         }
-
         // Si le nombre de lettre trouvé est >= au nombre de lettre dans le mot alors toutes les lettres sont trouvées
         if (nbLetterFound >= nbLetterInWord) {
           return false
         }
-
         // Je récup le nombre fois que la lettre a été écrite avant la lettre trouvé
         let Poscount = 0
         for (let i = 0; i < position; i++) {
@@ -97,7 +141,6 @@ export default {
             Poscount++
           }
         }
-
         // Et je regarde si le nombre de fois trouvé est < à au nombre de lettres de lettres dans le mot
         if (Poscount < nbLetterInWord) {
           this.User.letterGuessed.letters.push(lettre)
@@ -105,6 +148,7 @@ export default {
         }
       }
       },
+<<<<<<< HEAD
     Initialisation(){
       console.log(this.Game.word);
       for (let i = 0; i < this.Game.try; i++) {
@@ -116,6 +160,8 @@ export default {
     this.User.letterFound.positions.push(0);
     this.AddFirstLetter();
     },
+=======
+>>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd
     async KeyboardListener(event){
       if(/^[a-z-]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){
@@ -125,7 +171,7 @@ export default {
       }
 
       // Si la touche suppr est press
-      if (event.key == 'Backspace' || event.key == 'Delete') {
+      if (event.key == 'BACKSPACE' || event.key == 'Delete' || event.key == 'Backspace') {
         // Enlève la derniere lettre
         this.RemoveLast();
       // Si la touche entrée est press
@@ -135,11 +181,19 @@ export default {
             if(this.CheckRowIsFilled()){
             // if(true){
            //Si le mot existe
-          if(await Repository.ExistInWords(this.Grid.rows[this.Cursor.row].letters.join(''))){
+          if(await Repository.getWordExist(this.Grid.rows[this.Cursor.row].letters.join(''))){
           // if(true){
             if(this.IfIsWord()){
+              if(this.mode == "day"){
                 this.Game.status='won'
-                //Check les lettres
+              } else if(this.mode == "suite"){
+                  // Premier mot trouvé
+                  console.log("Premier mot de la suite du jour trouvé : "+this.Game.word+"... Mot suivant !");
+                this.Game.status = 'Listwordfound'
+                this.Game.word = this.Game.list[this.Game.list.indexOf(this.Game.word)+1]
+                console.log("Premier mot de la suite  : "+this.Game.word);
+                this.Reset()
+              }
             }
               for (let l = 0; l < this.Grid.rows[this.Cursor.row].letters.length; l++) {
                 const el = this.Grid.rows[this.Cursor.row].letters[l];
@@ -149,8 +203,10 @@ export default {
                 const el = this.Grid.rows[this.Cursor.row].letters[l];
                   this.CheckGuessedLetter(el,l)             
               }
-              this.IncrementRow();
-              this.AddFirstLetter();
+              if(this.Game.mode!='suite'){
+                this.IncrementRow();
+                this.AddFirstLetter();
+              } 
               
           } else {
             this.ShowError("Le mot n'existe pas");

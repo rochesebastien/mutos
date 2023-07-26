@@ -14,7 +14,7 @@
       <p>Mot trouvé : <b>Erreur</b></p>
       <p>Nombre de lettres : <b>404</b></p>
 
-      <p style="line-height: 115%;">Définition : La page que vous essayez d'atteindre n'<b>existe pas</b> pas encore, attendez la prochaine édition du Larousse 👩🏻‍🦰</p>
+      <p style="line-height: 115%;">Définition : La page que vous essayez d'atteindre n'<b>existe pas</b> encore, attendez la prochaine édition du Larousse 👩🏻‍🦰</p>
     </div>
 </template>
 
