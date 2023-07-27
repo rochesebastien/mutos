@@ -1,5 +1,4 @@
 <script>
-// import Row from './Row.vue';
 import Cell from './Cell.vue';
 import { ref } from 'vue';
 import { createApp } from 'vue';
@@ -18,20 +17,13 @@ export default {
   },
   props: {
     word: String,
-    mode:String
   },
   data() {
     return {
       Game:{
-<<<<<<< HEAD
-        word: this.word,
-        try:6,
-=======
         mode:"day",
->>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd
         status:"playing",
-        word: "",
-        list:[],
+        word: this.word,
         try:6,
       },
       Cursor:{
@@ -148,7 +140,6 @@ export default {
         }
       }
       },
-<<<<<<< HEAD
     Initialisation(){
       console.log(this.Game.word);
       for (let i = 0; i < this.Game.try; i++) {
@@ -160,8 +151,6 @@ export default {
     this.User.letterFound.positions.push(0);
     this.AddFirstLetter();
     },
-=======
->>>>>>> f54e77d14a348e60512525fb4e67f2c1fbee1bcd
     async KeyboardListener(event){
       if(/^[a-z-]$/.test(event.key)){
         if(!this.CheckRowIsFilled()){

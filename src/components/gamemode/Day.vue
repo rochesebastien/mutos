@@ -16,7 +16,7 @@ export default {
   methods: {
     fetchWordOftheDay() {
       // Assuming Repository.RandomWord() returns a Promise
-     Repository.getDayWord()
+     Repository.getWordOfTheDay()
         .then(word => {
           this.day_word = word;
           console.log(this.day_word);
