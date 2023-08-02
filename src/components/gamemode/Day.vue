@@ -33,7 +33,7 @@ export default {
 <template>
   <div class="rules_ctn">
         <h1>Mot du jour</h1>
-        <Grid :word="day_word" v-if="day_word"/>
+        <Grid :word="day_word" :mode="'day'" v-if="day_word"/>
         <h2  v-else>Chargement</h2>
   </div>
 </template>

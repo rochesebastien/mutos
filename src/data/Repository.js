@@ -1,11 +1,10 @@
-import json  from "./words.json"
+import json from "./words.json"
 import axios from 'axios';
 const API_URL = 'https://french-words-api.vercel.app';
 
 export default {
 
-
-   // ? Récupère un Array de la liste de mots français existants
+  // ? Récupère un Array de la liste de mots français existants
   async getWordExist(userWord) {
     try {
       const length = userWord.length
@@ -14,7 +13,7 @@ export default {
       const words = response.data;
       // Vérifie si le mot de l'utilisateur est présent dans la liste des mots
       const wordExists = words.includes(userWord.toLowerCase());
-      console.log(userWord+""+wordExists);
+      console.log(userWord + "" + wordExists);
       return wordExists;
     } catch (error) {
       console.log(error);
@@ -28,16 +27,26 @@ export default {
     } catch (error) {
       console.log(error);
     }
-    }, 
+  },
 
-      async getRandomWord(){
-        try {
-          const response = await axios.get(`${API_URL}/word`);
-          const word = response.data;
-          return word;
-          } catch(error) {
-          console.log(error);
-          }
-      },
+  async getRandomWord() {
+    try {
+      const response = await axios.get(`${API_URL}/word`);
+      const word = response.data;
+      return word;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 
-  }
+  async getSuiteOfTheDay() {
+    try {
+      const response = await axios.get(`${API_URL}/day/suite`);
+      const word = response.data;
+      return word;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+}

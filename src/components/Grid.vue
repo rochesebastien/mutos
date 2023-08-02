@@ -15,13 +15,14 @@ export default {
     Dialog,
     Chrono,
   },
+  emits: ['statusGame'],
   props: {
     word: String,
   },
   data() {
     return {
       Game:{
-        mode:"day",
+        mode:this.mode,
         status:"playing",
         word: this.word,
         try:6,
@@ -59,6 +60,7 @@ export default {
     },
     async Initialisation(){ 
     this.Reset()
+    alert(this.mode)
     this.Game.mode = this.mode
     console.log("Mode de jeu : "+this.Game.mode);
     if(this.mode == "day"){
@@ -173,15 +175,16 @@ export default {
           if(await Repository.getWordExist(this.Grid.rows[this.Cursor.row].letters.join(''))){
           // if(true){
             if(this.IfIsWord()){
-              if(this.mode == "day"){
-                this.Game.status='won'
-              } else if(this.mode == "suite"){
-                  // Premier mot trouvé
-                  console.log("Premier mot de la suite du jour trouvé : "+this.Game.word+"... Mot suivant !");
-                this.Game.status = 'Listwordfound'
-                this.Game.word = this.Game.list[this.Game.list.indexOf(this.Game.word)+1]
-                console.log("Premier mot de la suite  : "+this.Game.word);
-                this.Reset()
+              alert(this.Game.mode)
+              if(this.Game.mode == "day"){
+                alert("gagné")
+                this.Game.status="won"
+                alert(this.Game.status);
+              } else if(this.Game.mode == "daysuite"){
+                this.Game.status = "won"
+                alert("wshhh")
+                // this.$emit('statusGame', "won");
+                // this.Reset()
               }
             }
               for (let l = 0; l < this.Grid.rows[this.Cursor.row].letters.length; l++) {
@@ -192,10 +195,10 @@ export default {
                 const el = this.Grid.rows[this.Cursor.row].letters[l];
                   this.CheckGuessedLetter(el,l)             
               }
-              if(this.Game.mode!='suite'){
-                this.IncrementRow();
-                this.AddFirstLetter();
-              } 
+              // if(this.Game.mode!='suite'){
+              //   this.IncrementRow();
+              //   this.AddFirstLetter();
+              // } 
               
           } else {
             this.ShowError("Le mot n'existe pas");
@@ -257,6 +260,7 @@ export default {
     },
     // Vérifie si c'est le bon mot
     IfIsWord(){
+      console.log(this.Game.word);
       if(this.Grid.rows[this.Cursor.row].letters.join('') == this.Game.word){
        return true;
       } else {
