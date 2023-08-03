@@ -1,4 +1,3 @@
-import json from "./words.json"
 import axios from 'axios';
 const API_URL = 'https://french-words-api.vercel.app';
 

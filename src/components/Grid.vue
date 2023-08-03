@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       Game:{
-        mode:this.mode,
+        mode:"day",
         status:"playing",
         word: this.word,
         try:6,
@@ -58,28 +58,33 @@ export default {
       })
     }
     },
-    async Initialisation(){ 
-    this.Reset()
-    alert(this.mode)
-    this.Game.mode = this.mode
-    console.log("Mode de jeu : "+this.Game.mode);
-    if(this.mode == "day"){
-      this.Game.word = await Repository.getWordOfTheDay()
-      console.log("Mot du jour : "+this.Game.word);
-      console.log("Mot du jour : " + this.Game.word + "\n");
-    } else if(this.mode == "suite"){
-      this.Game.list = await Repository.getListOfTheDay()
-      console.log("Liste du jour : " + this.Game.list + "\n");
-      this.Game.word = this.Game.list[0]
-      console.log("Premier mot de la suite  : "+this.Game.word);
-    }
+    ModeInitialisation(){
+      // this.Reset()
+      this.Game.mode = this.mode
+      alert(this.mode)
+    },
+    // async Initialisation(){ 
+    // this.Reset()
+    // alert(this.mode)
+    // this.Game.mode = this.mode
+    // console.log("Mode de jeu : "+this.Game.mode);
+    // if(this.mode == "day"){
+    //   this.Game.word = await Repository.getWordOfTheDay()
+    //   console.log("Mot du jour : "+this.Game.word);
+    //   console.log("Mot du jour : " + this.Game.word + "\n");
+    // } else if(this.mode == "suite"){
+    //   this.Game.list = await Repository.getListOfTheDay()
+    //   console.log("Liste du jour : " + this.Game.list + "\n");
+    //   this.Game.word = this.Game.list[0]
+    //   console.log("Premier mot de la suite  : "+this.Game.word);
+    // }
     
 
-    this.User.letterFound.letters.push(this.Game.word.charAt(0));
-    this.User.letterFound.positions.push(0);
-    this.AddFirstLetter();
+    // this.User.letterFound.letters.push(this.Game.word.charAt(0));
+    // this.User.letterFound.positions.push(0);
+    // this.AddFirstLetter();
 
-    },
+    // },
     CheckFoundLetter(lettre,position){
       const word_array =  this.Game.word.split('');
       // Si la lettre est à la meme position dans le mot
@@ -175,14 +180,14 @@ export default {
           if(await Repository.getWordExist(this.Grid.rows[this.Cursor.row].letters.join(''))){
           // if(true){
             if(this.IfIsWord()){
-              alert(this.Game.mode)
+              // alert(this.Game.mode)
               if(this.Game.mode == "day"){
-                alert("gagné")
+                // alert("gagné")
                 this.Game.status="won"
                 alert(this.Game.status);
               } else if(this.Game.mode == "daysuite"){
                 this.Game.status = "won"
-                alert("wshhh")
+                // alert("wshhh")
                 // this.$emit('statusGame', "won");
                 // this.Reset()
               }
@@ -195,10 +200,6 @@ export default {
                 const el = this.Grid.rows[this.Cursor.row].letters[l];
                   this.CheckGuessedLetter(el,l)             
               }
-              // if(this.Game.mode!='suite'){
-              //   this.IncrementRow();
-              //   this.AddFirstLetter();
-              // } 
               
           } else {
             this.ShowError("Le mot n'existe pas");
@@ -270,6 +271,7 @@ export default {
     },
     created(){
       this.Initialisation();
+      this.ModeInitialisation()
     },
    mounted() {
     window.addEventListener("keydown", async (event) => {

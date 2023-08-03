@@ -25,6 +25,7 @@ export default {
         .then(suite => {
           this.day_suite = suite;
           console.log(this.day_suite);
+          console.log(this.gamemode);
           this.incrementWord()
         })
         .catch(error => {
