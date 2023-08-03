@@ -12,7 +12,7 @@ export default {
       const words = response.data;
       // Vérifie si le mot de l'utilisateur est présent dans la liste des mots
       const wordExists = words.includes(userWord.toLowerCase());
-      console.log(userWord + "" + wordExists);
+      console.log(userWord + " : " + wordExists);
       return wordExists;
     } catch (error) {
       console.log(error);

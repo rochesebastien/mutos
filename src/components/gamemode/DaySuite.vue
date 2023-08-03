@@ -25,17 +25,18 @@ export default {
         .then(suite => {
           this.day_suite = suite;
           console.log(this.day_suite);
-          console.log(this.gamemode);
-          this.incrementWord()
+          this.word = this.day_suite[0]
         })
         .catch(error => {
           console.error('Impossible de récupérer la liste du jour', error);
         });
     },
     incrementWord(){
-      console.log(this.day_suite + this.increment);
+      this.increment++
+      console.log(this.increment);
       this.word = this.day_suite[this.increment]
-    }
+      console.log(this.day_suite[this.increment]);
+    },
 
   }
 }
@@ -44,7 +45,7 @@ export default {
 <template>
   <div class="rules_ctn">
     <h1>Suite du jour</h1>
-    <Grid :word="word" :mode="gamemode" v-if="day_suite" @statusGame="increment"/>
+    <Grid :word="word" :mode="gamemode" v-if="day_suite" @statusGame="incrementWord"/>
     <h2  v-else>Chargement</h2>
   </div>
 </template>
