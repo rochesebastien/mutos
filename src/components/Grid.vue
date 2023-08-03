@@ -1,9 +1,9 @@
 <script>
-import Cell from './Cell.vue';
+import Cell from './Cell.vue'
 import { ref } from 'vue';
 import { createApp } from 'vue';
 import Repository from '../data/Repository';
-import Dialog from './Dialog.vue';
+import Dialog from './Dialog';
 import Chrono from './Chrono.vue';
 
 export default {
@@ -50,11 +50,6 @@ export default {
       this.User.letterFound.positions = []
       this.User.letterGuessed.letters = []
       this.User.letterGuessed.positions = []
-      //   for (let i = 0; i < this.Game.try; i++) {
-      //   this.Grid.rows.push({
-      //     letters: []
-      //   })
-      // }
     },
     CheckFoundLetter(lettre, position) {
       const word_array = this.Game.word.split('');
