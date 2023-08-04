@@ -3,7 +3,7 @@ import Cell from './Cell.vue'
 import { ref } from 'vue';
 import { createApp } from 'vue';
 import Repository from '../data/Repository';
-import Dialog from './Dialog';
+import Dialog from './Dialog.vue';
 import Chrono from './Chrono.vue';
 
 export default {
