@@ -26,6 +26,7 @@ Le projet est un jeu en ligne basé sur le célèbre jeu de mots Wordle (ou Motu
 [![](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)](https://vuejs.org)
 [![](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
 
+🤖 Used [Gitmoji](https://gitmoji.dev)  for commit messages 💬
 
 -----------------  
   
