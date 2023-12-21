@@ -31,21 +31,29 @@ Le projet est un jeu en ligne basé sur le célèbre jeu de mots Wordle (ou Motu
   
 ## ⚙️ Running the projet 🚂
 To run this projet just run the following command in your terminal : 
-- Clone this repository using git clone : 
+- **Clone this repository using git clone** : 
 ```bash
 git clone https://github.com/rochesebastien/mutos.git
 ```  
-- Install the depecencies : 
+- **Install the depecencies** : 
 ```bash
 npm install or npm i
 ``` 
-- Run the app in dev environnement : 
+
+
+- **Environnement variables** :    To use locally, you need to create a .env file in the root folder and place this inside : 
+```yml
+VITE_API_TOKEN="your_token_api"
+```
+
+- **Run the app in dev environnement** : 
 ```bash
 npm run dev 
 ``` 
-- Build the app for production environnement : 
+- **Build the app for production environnement** : 
 ```bash
 npm run build 
+
 ``` 
 ## 🏆 Credits 🤝
 
